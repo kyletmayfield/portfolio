@@ -305,6 +305,11 @@ body {
         <a href="https://www.linkedin.com/in/kyle-d-lamb/" target="_blank">LinkedIn</a>
         <span class="sep">|</span>
         <a href="https://github.com/kyletmayfield" target="_blank">GitHub</a>
+        <span class="sep">|</span>
+        <a href="https://portfolio.thesocialfox.net" target="_blank">Portfolio</a>
+      </div>
+      <div style="margin-top:0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted);">
+        Resume password: <span style="color:var(--orange-bright);font-weight:500;">bearfox17</span>
       </div>
     </div>
 
@@ -486,7 +491,7 @@ window.addEventListener('scroll', () => {
 function checkPassword() {
   const input = document.getElementById('passwordInput');
   const error = document.getElementById('passwordError');
-  if (input.value === 'YOUR_PASSWORD_HERE') {
+  if (input.value === 'bearfox17') {
     document.getElementById('passwordGate').style.display = 'none';
     document.getElementById('resumeContent').classList.add('visible');
     sessionStorage.setItem('resumeAuth', 'true');
