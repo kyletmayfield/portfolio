@@ -503,9 +503,15 @@ async function unlockAndLoad() {
   await renderPostList();
 }
 
-function checkPassword() {
+async function hashValue(str) {
+  const data = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function checkPassword() {
   const input = document.getElementById('passwordInput');
-  if (input.value === 'YOUR_PASSWORD_HERE') {
+  const hashed = await hashValue(input.value);
+  if (hashed === '5198a4f00a4124adcccaa1a1894886eb4babf305a57cdb8547333e453ebf0f60') {
     unlockAndLoad();
   } else {
     document.getElementById('passwordError').classList.add('visible');

@@ -485,10 +485,16 @@ window.addEventListener('scroll', () => {
 });
 
 // Password check
-function checkPassword() {
+async function hashValue(str) {
+  const data = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function checkPassword() {
   const input = document.getElementById('passwordInput');
   const error = document.getElementById('passwordError');
-  if (input.value === 'bearfox17') {
+  const hashed = await hashValue(input.value);
+  if (hashed === 'f7e6447ba0ca6a89b14f3510d61a74d2b38fab90606c6da9ab337e85b586df0f') {
     document.getElementById('passwordGate').style.display = 'none';
     document.getElementById('resumeContent').classList.add('visible');
     sessionStorage.setItem('resumeAuth', 'true');
