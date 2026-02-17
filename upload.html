@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyle Lamb | Upload</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;600;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ice-deep: #0a1628;
+  --ice-dark: #0f1f3a;
+  --ice-mid: #1a3152;
+  --ice-light: #2a4a6b;
+  --ice-glow: #4a8bbe;
+  --ice-bright: #7ec8e3;
+  --ice-frost: #b8e4f0;
+  --ice-white: #e8f4f8;
+  --orange-deep: #c2410c;
+  --orange-warm: #ea580c;
+  --orange-bright: #f97316;
+  --orange-light: #fb923c;
+  --orange-pale: #fdba74;
+  --text-primary: #e8f4f8;
+  --text-secondary: #7ec8e3;
+  --text-muted: #4a8bbe;
+  --card-bg: rgba(15, 31, 58, 0.85);
+  --card-border: rgba(74, 139, 190, 0.2);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  background: var(--ice-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.aurora-bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.aurora-bg::before {
+  content: ''; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+  background:
+    radial-gradient(ellipse 40% 30% at 30% 20%, rgba(74, 139, 190, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 25% at 70% 60%, rgba(249, 115, 22, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 50% 80%, rgba(74, 139, 190, 0.06) 0%, transparent 70%);
+  animation: auroraDrift 25s ease-in-out infinite;
+}
+@keyframes auroraDrift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(3%, -2%) rotate(1deg); }
+  66% { transform: translate(-2%, 3%) rotate(-1deg); }
+}
+
+.snowfall { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.snowflake {
+  position: absolute; width: 3px; height: 3px;
+  background: rgba(232, 244, 248, 0.3); border-radius: 50%;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+  10% { opacity: 1; } 90% { opacity: 1; }
+  100% { transform: translateY(110vh) translateX(var(--drift)); opacity: 0; }
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(10, 22, 40, 0.8); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border); transition: all 0.3s ease;
+}
+.nav.scrolled { padding: 0.6rem 2rem; background: rgba(10, 22, 40, 0.95); }
+.nav-logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em; color: var(--text-primary); cursor: pointer; text-decoration: none; }
+.nav-logo span { color: var(--orange-bright); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;
+  font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  transition: color 0.3s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--orange-bright); transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--orange-bright); }
+.nav-links a:hover::after { width: 100%; }
+
+.main { position: relative; z-index: 2; }
+
+/* Password Gate */
+.password-gate {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center; padding: 2rem;
+}
+.password-gate h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.password-gate .subtitle {
+  font-family: 'Crimson Pro', serif; font-size: 1.15rem;
+  color: var(--text-secondary); font-style: italic; margin-bottom: 2rem;
+}
+.lock-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.8; }
+.password-form { display: flex; gap: 0.75rem; align-items: center; }
+.password-form input {
+  padding: 0.8rem 1.5rem; border-radius: 10px; border: 1px solid var(--card-border);
+  background: var(--card-bg); color: var(--text-primary); font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem; backdrop-filter: blur(10px); outline: none; width: 260px; transition: border-color 0.3s;
+}
+.password-form input:focus { border-color: var(--orange-bright); }
+.password-form input::placeholder { color: var(--text-muted); }
+.password-form button, .btn-action {
+  padding: 0.8rem 2rem; border-radius: 10px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-warm));
+  color: white; font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700; font-size: 0.9rem; letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3); transition: all 0.3s;
+}
+.password-form button:hover, .btn-action:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(249, 115, 22, 0.4); }
+.password-error {
+  color: #ef4444; font-size: 0.85rem; margin-top: 1rem; opacity: 0; transition: opacity 0.3s;
+}
+.password-error.visible { opacity: 1; }
+
+/* Upload Content */
+.upload-content { display: none; padding: 6rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
+.upload-content.visible { display: block; }
+
+.page-title {
+  text-align: center; font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 800;
+  letter-spacing: -0.02em; margin-bottom: 0.5rem;
+}
+.page-title .accent {
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.page-subtitle {
+  text-align: center; font-family: 'Crimson Pro', serif; font-size: 1.1rem;
+  color: var(--text-secondary); font-style: italic; margin-bottom: 2.5rem;
+}
+
+/* Upload Form */
+.upload-form {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 2rem; margin-bottom: 2rem; backdrop-filter: blur(10px);
+}
+.form-group { margin-bottom: 1.25rem; }
+.form-label {
+  display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--orange-bright); margin-bottom: 0.5rem;
+}
+.form-input, .form-textarea {
+  width: 100%; padding: 0.75rem 1rem; border-radius: 10px;
+  border: 1px solid var(--card-border); background: rgba(10, 22, 40, 0.6);
+  color: var(--text-primary); font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.95rem; outline: none; transition: border-color 0.3s;
+}
+.form-input:focus, .form-textarea:focus { border-color: var(--orange-bright); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+.form-textarea { resize: vertical; min-height: 80px; }
+
+/* Image upload area */
+.image-upload-area {
+  border: 2px dashed var(--card-border); border-radius: 12px;
+  padding: 2rem; text-align: center; cursor: pointer;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.image-upload-area:hover { border-color: var(--orange-bright); background: rgba(249, 115, 22, 0.03); }
+.image-upload-area.has-image { display: none; }
+.image-upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.6; }
+.image-upload-text { font-size: 0.9rem; color: var(--text-secondary); }
+.image-upload-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+.image-upload-area input[type="file"] { display: none; }
+
+/* Crop Editor (Instagram-style) */
+.crop-editor { display: none; }
+.crop-editor.visible { display: block; }
+
+.crop-viewport {
+  position: relative; overflow: hidden; border-radius: 10px;
+  background: #000; margin: 0 auto; cursor: grab;
+  border: 2px solid var(--card-border); max-width: 100%;
+}
+.crop-viewport:active { cursor: grabbing; }
+.crop-viewport img {
+  position: absolute; top: 0; left: 0;
+  user-select: none; -webkit-user-drag: none; pointer-events: none;
+  will-change: transform;
+}
+
+/* Crop grid overlay */
+.crop-grid {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2; opacity: 0;
+  transition: opacity 0.2s;
+}
+.crop-viewport:active .crop-grid { opacity: 1; }
+.crop-grid-line {
+  position: absolute; background: rgba(255, 255, 255, 0.35);
+}
+.crop-grid-line.h { width: 100%; height: 1px; left: 0; }
+.crop-grid-line.v { height: 100%; width: 1px; top: 0; }
+.crop-grid-line.h:first-child { top: 33.33%; }
+.crop-grid-line.h:nth-child(2) { top: 66.66%; }
+.crop-grid-line.v:nth-child(3) { left: 33.33%; }
+.crop-grid-line.v:nth-child(4) { left: 66.66%; }
+
+/* Crop controls */
+.crop-controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;
+  margin-top: 0.75rem; padding: 0.5rem 0;
+}
+.aspect-buttons { display: flex; gap: 0.4rem; }
+.aspect-btn {
+  padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid var(--card-border);
+  background: transparent; color: var(--text-secondary); cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+  transition: all 0.2s; letter-spacing: 0.02em;
+}
+.aspect-btn:hover { border-color: var(--ice-glow); color: var(--text-primary); }
+.aspect-btn.active {
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-warm));
+  border-color: var(--orange-bright); color: white;
+  box-shadow: 0 2px 12px rgba(249, 115, 22, 0.25);
+}
+
+.zoom-control { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 150px; }
+.zoom-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+.zoom-slider {
+  -webkit-appearance: none; appearance: none; flex: 1; height: 4px;
+  border-radius: 2px; background: var(--ice-mid); outline: none;
+}
+.zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-warm));
+  cursor: pointer; box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+}
+.zoom-slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%; border: none;
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-warm));
+  cursor: pointer; box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+}
+
+.crop-change-btn {
+  padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid var(--card-border);
+  background: rgba(74, 139, 190, 0.1); color: var(--text-secondary); cursor: pointer;
+  font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.75rem; font-weight: 600;
+  transition: all 0.2s;
+}
+.crop-change-btn:hover { border-color: var(--ice-glow); color: var(--text-primary); }
+
+/* Tags input */
+.tags-container { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+.tag-chip {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.25rem 0.65rem; border-radius: 6px; font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace; font-weight: 600;
+  background: rgba(249, 115, 22, 0.12); color: var(--orange-light);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+.tag-remove {
+  cursor: pointer; font-size: 0.85rem; opacity: 0.7; transition: opacity 0.2s;
+  background: none; border: none; color: var(--orange-light); padding: 0; line-height: 1;
+}
+.tag-remove:hover { opacity: 1; }
+
+/* Form actions */
+.form-actions { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
+.btn-secondary-action {
+  padding: 0.8rem 2rem; border-radius: 10px; cursor: pointer;
+  background: transparent; border: 1px solid var(--card-border);
+  color: var(--text-secondary); font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 600; font-size: 0.9rem; transition: all 0.3s;
+}
+.btn-secondary-action:hover { border-color: var(--ice-glow); color: var(--text-primary); background: rgba(74, 139, 190, 0.1); }
+
+/* Status toast */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+  padding: 0.8rem 2rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+  z-index: 300; transition: transform 0.4s ease; pointer-events: none;
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-warm));
+  color: white; box-shadow: 0 8px 30px rgba(249, 115, 22, 0.3);
+}
+.toast.visible { transform: translateX(-50%) translateY(0); }
+
+/* Existing posts list */
+.section-divider {
+  display: flex; align-items: center; gap: 1rem; margin: 2rem 0 1.5rem;
+}
+.divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--card-border), transparent); }
+.divider-label {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--orange-bright); white-space: nowrap;
+}
+
+.post-list { display: flex; flex-direction: column; gap: 1rem; }
+.post-item {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 12px; padding: 1rem 1.25rem; backdrop-filter: blur(10px);
+  display: flex; gap: 1rem; align-items: center;
+}
+.post-item-img {
+  width: 80px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0;
+}
+.post-item-info { flex: 1; min-width: 0; }
+.post-item-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.15rem; }
+.post-item-caption {
+  font-family: 'Crimson Pro', serif; font-size: 0.85rem; color: var(--text-secondary);
+  font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.post-item-date { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-muted); margin-top: 0.15rem; }
+.post-item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.btn-icon {
+  width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--card-border);
+  background: rgba(74, 139, 190, 0.1); color: var(--text-secondary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.3s;
+}
+.btn-icon:hover { border-color: var(--orange-bright); color: var(--orange-bright); background: rgba(249, 115, 22, 0.1); }
+.btn-icon.danger:hover { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+.no-posts {
+  text-align: center; padding: 2rem; color: var(--text-muted);
+  font-family: 'Crimson Pro', serif; font-style: italic;
+}
+
+.footer {
+  text-align: center; padding: 2rem; border-top: 1px solid var(--card-border);
+  font-size: 0.8rem; color: var(--text-muted); margin-top: 3rem;
+}
+.footer span { color: var(--orange-bright); }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .upload-content { padding: 5rem 1rem 2rem; }
+  .password-form { flex-direction: column; }
+  .password-form input { width: 100%; }
+  .post-item { flex-direction: column; align-items: flex-start; }
+  .post-item-img { width: 100%; height: 150px; }
+  .form-actions { flex-direction: column; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg"></div>
+<div class="snowfall" id="snowfall"></div>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">Kyle <span>Lamb</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="gallery.html">Life</a></li>
+    <li><a href="resume.html">Resume</a></li>
+  </ul>
+</nav>
+
+<div class="main">
+
+  <!-- Password Gate -->
+  <div class="password-gate" id="passwordGate">
+    <div class="lock-icon">🔐</div>
+    <h2>Upload <span style="color: var(--orange-bright);">Manager</span></h2>
+    <p class="subtitle">Admin access required to manage gallery posts.</p>
+    <div class="password-form">
+      <input type="password" id="passwordInput" placeholder="Enter password..." onkeydown="if(event.key==='Enter')checkPassword()" autofocus>
+      <button onclick="checkPassword()">Unlock</button>
+    </div>
+    <div class="password-error" id="passwordError">Incorrect password. Try again.</div>
+  </div>
+
+  <!-- Upload Content -->
+  <div class="upload-content" id="uploadContent">
+
+    <h1 class="page-title" style="animation: fadeUp 0.6s ease-out both;">Gallery <span class="accent">Upload</span></h1>
+    <p class="page-subtitle" style="animation: fadeUp 0.6s ease-out 0.1s both;">Add photos and moments to your Life page.</p>
+
+    <!-- Upload Form -->
+    <div class="upload-form" style="animation: fadeUp 0.6s ease-out 0.2s both;">
+
+      <div class="form-group">
+        <label class="form-label">Photo</label>
+        <div class="image-upload-area" id="imageUploadArea" onclick="document.getElementById('imageFile').click()">
+          <input type="file" id="imageFile" accept="image/*" onchange="handleImageSelect(event)">
+          <div class="image-upload-icon">📷</div>
+          <div class="image-upload-text">Click to select a photo</div>
+          <div class="image-upload-hint">JPG, PNG, or WebP — will be resized for web</div>
+        </div>
+        <!-- Instagram-style crop editor -->
+        <div class="crop-editor" id="cropEditor">
+          <div class="crop-viewport" id="cropViewport">
+            <img id="cropImage" alt="Crop preview">
+            <div class="crop-grid">
+              <div class="crop-grid-line h"></div>
+              <div class="crop-grid-line h"></div>
+              <div class="crop-grid-line v"></div>
+              <div class="crop-grid-line v"></div>
+            </div>
+          </div>
+          <div class="crop-controls">
+            <div class="aspect-buttons">
+              <button class="aspect-btn active" data-ratio="original" onclick="setAspectRatio('original', this)">Original</button>
+              <button class="aspect-btn" data-ratio="1:1" onclick="setAspectRatio('1:1', this)">1:1</button>
+              <button class="aspect-btn" data-ratio="4:3" onclick="setAspectRatio('4:3', this)">4:3</button>
+              <button class="aspect-btn" data-ratio="4:5" onclick="setAspectRatio('4:5', this)">4:5</button>
+              <button class="aspect-btn" data-ratio="16:9" onclick="setAspectRatio('16:9', this)">16:9</button>
+            </div>
+            <div class="zoom-control">
+              <span class="zoom-label">Zoom</span>
+              <input type="range" class="zoom-slider" id="zoomSlider" min="100" max="300" value="100" oninput="setZoom(this.value)">
+            </div>
+            <button class="crop-change-btn" onclick="changePhoto()">Change Photo</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="form-input" id="postTitle" type="text" placeholder="e.g., Beach Day in St. Pete">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Caption</label>
+        <textarea class="form-textarea" id="postCaption" placeholder="Tell the story behind this moment..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input class="form-input" id="postDate" type="text" placeholder="e.g., February 2026">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tags <span style="font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--text-muted);">(press Enter to add)</span></label>
+        <input class="form-input" id="tagInput" type="text" placeholder="e.g., Travel, Florida, Pets..." onkeydown="handleTagKey(event)">
+        <div class="tags-container" id="tagsContainer"></div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-action" onclick="savePost()">Publish Post</button>
+        <button class="btn-secondary-action" onclick="clearForm()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Existing Posts -->
+    <div class="section-divider">
+      <div class="divider-line"></div>
+      <div class="divider-label">Existing Posts</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="post-list" id="postList"></div>
+
+  </div>
+
+  <footer class="footer">
+    <p>Built with ❄️ and <span>🍊</span> by Kyle Lamb — 2026</p>
+  </footer>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// Snowfall
+(function() {
+  const container = document.getElementById('snowfall');
+  for (let i = 0; i < 40; i++) {
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.style.left = Math.random() * 100 + '%';
+    flake.style.width = flake.style.height = (Math.random() * 3 + 1) + 'px';
+    flake.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    flake.style.animationDelay = (Math.random() * 15) + 's';
+    flake.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    flake.style.opacity = Math.random() * 0.4 + 0.1;
+    container.appendChild(flake);
+  }
+})();
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ============ SUPABASE ============
+const SUPABASE_URL = 'https://gfitbasveibyzgplqxue.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmaXRiYXN2ZWlieXpncGxxeHVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDgyODYsImV4cCI6MjA4NjkyNDI4Nn0.ueng-rRlipixqPuHwgMbQePIN1uZpZhnbyr47yTx0Hw';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Password
+async function unlockAndLoad() {
+  document.getElementById('passwordGate').style.display = 'none';
+  document.getElementById('uploadContent').classList.add('visible');
+  sessionStorage.setItem('uploadAuth', 'true');
+  await migrateLocalStoragePosts();
+  await renderPostList();
+}
+
+function checkPassword() {
+  const input = document.getElementById('passwordInput');
+  if (input.value === 'YOUR_PASSWORD_HERE') {
+    unlockAndLoad();
+  } else {
+    document.getElementById('passwordError').classList.add('visible');
+    input.value = '';
+    input.focus();
+  }
+}
+
+if (sessionStorage.getItem('uploadAuth') === 'true') {
+  unlockAndLoad();
+}
+
+// ============ IMAGE HANDLING + CROP ============
+let currentImageData = null;
+let cropState = {
+  imgWidth: 0, imgHeight: 0,     // natural image dimensions (after initial resize)
+  vpWidth: 0, vpHeight: 0,       // viewport pixel dimensions
+  zoom: 1,                        // current zoom multiplier (1 = fit)
+  panX: 0, panY: 0,              // pan offset in px (image-space)
+  aspect: 'original',             // current aspect ratio key
+  baseScale: 1,                   // scale that fits image to viewport at zoom=1
+  dragging: false,
+  dragStartX: 0, dragStartY: 0,
+  panStartX: 0, panStartY: 0
+};
+
+function handleImageSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      // Resize to manageable size while preserving full image
+      const MAX_DIM = 1600;
+      let w = img.width, h = img.height;
+      if (w > MAX_DIM || h > MAX_DIM) {
+        if (w > h) { h = h * MAX_DIM / w; w = MAX_DIM; }
+        else { w = w * MAX_DIM / h; h = MAX_DIM; }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const fullImageData = canvas.toDataURL('image/jpeg', 0.92);
+
+      cropState.imgWidth = w;
+      cropState.imgHeight = h;
+      cropState.zoom = 1;
+      cropState.panX = 0;
+      cropState.panY = 0;
+
+      // Show crop editor, hide upload area
+      document.getElementById('imageUploadArea').classList.add('has-image');
+      document.getElementById('cropEditor').classList.add('visible');
+
+      const cropImg = document.getElementById('cropImage');
+      cropImg.src = fullImageData;
+
+      // Reset aspect to original and zoom slider
+      document.getElementById('zoomSlider').value = 100;
+      document.querySelectorAll('.aspect-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.aspect-btn[data-ratio="original"]').classList.add('active');
+      cropState.aspect = 'original';
+
+      layoutCropViewport();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function changePhoto() {
+  document.getElementById('imageFile').click();
+}
+
+function layoutCropViewport() {
+  const viewport = document.getElementById('cropViewport');
+  const container = viewport.parentElement;
+  const maxW = container.clientWidth;
+  const maxH = 400;
+
+  let vpW, vpH;
+  const imgRatio = cropState.imgWidth / cropState.imgHeight;
+
+  if (cropState.aspect === 'original') {
+    // Fit the original image ratio into max bounds
+    if (imgRatio > maxW / maxH) { vpW = maxW; vpH = maxW / imgRatio; }
+    else { vpH = maxH; vpW = maxH * imgRatio; }
+  } else {
+    const [aw, ah] = cropState.aspect.split(':').map(Number);
+    const targetRatio = aw / ah;
+    if (targetRatio > maxW / maxH) { vpW = maxW; vpH = maxW / targetRatio; }
+    else { vpH = maxH; vpW = maxH * targetRatio; }
+  }
+
+  vpW = Math.round(vpW);
+  vpH = Math.round(vpH);
+  cropState.vpWidth = vpW;
+  cropState.vpHeight = vpH;
+
+  viewport.style.width = vpW + 'px';
+  viewport.style.height = vpH + 'px';
+
+  // baseScale: scale that makes the image cover the viewport at zoom=1
+  const scaleX = vpW / cropState.imgWidth;
+  const scaleY = vpH / cropState.imgHeight;
+  cropState.baseScale = Math.max(scaleX, scaleY);
+
+  // Reset pan to center
+  cropState.panX = 0;
+  cropState.panY = 0;
+
+  // Recalculate zoom bounds — min zoom = cover
+  const slider = document.getElementById('zoomSlider');
+  slider.value = 100;
+  cropState.zoom = 1;
+
+  updateCropImage();
+}
+
+function updateCropImage() {
+  const img = document.getElementById('cropImage');
+  const scale = cropState.baseScale * cropState.zoom;
+  const displayW = cropState.imgWidth * scale;
+  const displayH = cropState.imgHeight * scale;
+
+  img.style.width = displayW + 'px';
+  img.style.height = displayH + 'px';
+
+  // Clamp pan so image always covers viewport
+  const maxPanX = Math.max(0, (displayW - cropState.vpWidth) / 2);
+  const maxPanY = Math.max(0, (displayH - cropState.vpHeight) / 2);
+  cropState.panX = Math.max(-maxPanX, Math.min(maxPanX, cropState.panX));
+  cropState.panY = Math.max(-maxPanY, Math.min(maxPanY, cropState.panY));
+
+  // Center image + apply pan
+  const left = (cropState.vpWidth - displayW) / 2 + cropState.panX;
+  const top = (cropState.vpHeight - displayH) / 2 + cropState.panY;
+  img.style.left = left + 'px';
+  img.style.top = top + 'px';
+}
+
+function setAspectRatio(ratio, btn) {
+  document.querySelectorAll('.aspect-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  cropState.aspect = ratio;
+  layoutCropViewport();
+}
+
+function setZoom(val) {
+  cropState.zoom = val / 100;
+  updateCropImage();
+}
+
+// Drag-to-pan
+(function() {
+  const vp = document.getElementById('cropViewport');
+
+  function startDrag(x, y) {
+    cropState.dragging = true;
+    cropState.dragStartX = x;
+    cropState.dragStartY = y;
+    cropState.panStartX = cropState.panX;
+    cropState.panStartY = cropState.panY;
+  }
+
+  function moveDrag(x, y) {
+    if (!cropState.dragging) return;
+    cropState.panX = cropState.panStartX + (x - cropState.dragStartX);
+    cropState.panY = cropState.panStartY + (y - cropState.dragStartY);
+    updateCropImage();
+  }
+
+  function endDrag() { cropState.dragging = false; }
+
+  // Mouse events
+  vp.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
+  document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+  document.addEventListener('mouseup', endDrag);
+
+  // Touch events
+  vp.addEventListener('touchstart', e => { e.preventDefault(); const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, { passive: false });
+  document.addEventListener('touchmove', e => { if (cropState.dragging) { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); } });
+  document.addEventListener('touchend', endDrag);
+
+  // Scroll-to-zoom on viewport
+  vp.addEventListener('wheel', e => {
+    e.preventDefault();
+    const slider = document.getElementById('zoomSlider');
+    let val = parseInt(slider.value) - Math.sign(e.deltaY) * 10;
+    val = Math.max(100, Math.min(300, val));
+    slider.value = val;
+    setZoom(val);
+  }, { passive: false });
+})();
+
+// Get cropped image data for saving
+function getCroppedImageData() {
+  const scale = cropState.baseScale * cropState.zoom;
+  const displayW = cropState.imgWidth * scale;
+  const displayH = cropState.imgHeight * scale;
+
+  // Visible region in image-space
+  const left = (cropState.vpWidth - displayW) / 2 + cropState.panX;
+  const top = (cropState.vpHeight - displayH) / 2 + cropState.panY;
+
+  // Source rect on original image
+  const sx = Math.max(0, -left / scale);
+  const sy = Math.max(0, -top / scale);
+  const sRight = Math.min(cropState.imgWidth, (cropState.vpWidth - left) / scale);
+  const sBottom = Math.min(cropState.imgHeight, (cropState.vpHeight - top) / scale);
+  const sw = sRight - sx;
+  const sh = sBottom - sy;
+
+  // Output size: fit to max 1200x900
+  let outW = cropState.vpWidth;
+  let outH = cropState.vpHeight;
+  if (outW > 1200) { outH = outH * 1200 / outW; outW = 1200; }
+  if (outH > 900) { outW = outW * 900 / outH; outH = 900; }
+  outW = Math.round(outW); outH = Math.round(outH);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = outW; canvas.height = outH;
+  const ctx = canvas.getContext('2d');
+
+  const srcImg = document.getElementById('cropImage');
+  ctx.drawImage(srcImg, sx, sy, sw, sh, 0, 0, outW, outH);
+
+  return canvas.toDataURL('image/jpeg', 0.82);
+}
+
+// ============ TAGS ============
+let currentTags = [];
+
+function handleTagKey(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    const input = document.getElementById('tagInput');
+    const tag = input.value.trim();
+    if (tag && !currentTags.includes(tag)) {
+      currentTags.push(tag);
+      renderTags();
+    }
+    input.value = '';
+  }
+}
+
+function removeTag(index) {
+  currentTags.splice(index, 1);
+  renderTags();
+}
+
+function renderTags() {
+  document.getElementById('tagsContainer').innerHTML = currentTags.map((tag, i) =>
+    `<span class="tag-chip">${tag}<button class="tag-remove" onclick="removeTag(${i})">×</button></span>`
+  ).join('');
+}
+
+// Convert base64 data URL to Blob
+function dataUrlToBlob(dataUrl) {
+  const [header, b64] = dataUrl.split(',');
+  const mime = header.match(/:(.*?);/)[1];
+  const bytes = atob(b64);
+  const arr = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+
+// Upload image blob to Supabase Storage, return public URL
+async function uploadImage(dataUrl) {
+  const blob = dataUrlToBlob(dataUrl);
+  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+
+  const { error } = await sb.storage.from('gallery').upload(fileName, blob, {
+    contentType: 'image/jpeg', cacheControl: '31536000', upsert: false
+  });
+
+  if (error) throw new Error('Image upload failed: ' + error.message);
+
+  const { data } = sb.storage.from('gallery').getPublicUrl(fileName);
+  return { url: data.publicUrl, path: fileName };
+}
+
+// ============ POSTS (Supabase) ============
+async function fetchPosts() {
+  const { data, error } = await sb
+    .from('posts')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) { console.error(error); return []; }
+  return data || [];
+}
+
+let saving = false;
+async function savePost() {
+  if (saving) return;
+  const title = document.getElementById('postTitle').value.trim();
+  const caption = document.getElementById('postCaption').value.trim();
+  const date = document.getElementById('postDate').value.trim();
+
+  if (!title) { showToast('Please enter a title.'); return; }
+  if (!document.getElementById('cropEditor').classList.contains('visible')) { showToast('Please select a photo.'); return; }
+
+  saving = true;
+  showToast('Uploading...');
+
+  try {
+    // Get cropped image and upload to storage
+    const croppedData = getCroppedImageData();
+    const { url, path } = await uploadImage(croppedData);
+
+    // Insert post record
+    const { error } = await sb.from('posts').insert({
+      title,
+      caption,
+      date: date || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+      tags: [...currentTags],
+      image_url: url
+    });
+
+    if (error) throw new Error('Save failed: ' + error.message);
+
+    clearForm();
+    await renderPostList();
+    showToast('Post published! View it on the Life page.');
+  } catch (err) {
+    console.error(err);
+    showToast('Error: ' + err.message);
+  } finally {
+    saving = false;
+  }
+}
+
+async function deletePost(id, imagePath) {
+  if (!confirm('Delete this post?')) return;
+
+  try {
+    // Delete from database
+    const { error } = await sb.from('posts').delete().eq('id', id);
+    if (error) throw error;
+
+    // Delete image from storage if we have the path
+    if (imagePath) {
+      await sb.storage.from('gallery').remove([imagePath]);
+    }
+
+    await renderPostList();
+    showToast('Post deleted.');
+  } catch (err) {
+    console.error(err);
+    showToast('Error deleting post.');
+  }
+}
+
+function clearForm() {
+  document.getElementById('postTitle').value = '';
+  document.getElementById('postCaption').value = '';
+  document.getElementById('postDate').value = '';
+  document.getElementById('tagInput').value = '';
+  document.getElementById('imageFile').value = '';
+  document.getElementById('cropImage').src = '';
+  document.getElementById('imageUploadArea').classList.remove('has-image');
+  document.getElementById('cropEditor').classList.remove('visible');
+  currentImageData = null;
+  currentTags = [];
+  cropState.zoom = 1;
+  cropState.panX = 0;
+  cropState.panY = 0;
+  renderTags();
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// Extract storage file name from public URL
+function getStoragePath(url) {
+  if (!url) return null;
+  const marker = '/object/public/gallery/';
+  const idx = url.indexOf(marker);
+  return idx >= 0 ? url.slice(idx + marker.length) : null;
+}
+
+async function renderPostList() {
+  const posts = await fetchPosts();
+  const container = document.getElementById('postList');
+
+  if (posts.length === 0) {
+    container.innerHTML = '<div class="no-posts">No posts yet. Upload your first moment above!</div>';
+    return;
+  }
+
+  container.innerHTML = posts.map(post => {
+    const path = getStoragePath(post.image_url);
+    const pathAttr = path ? ` data-path="${escapeHtml(path)}"` : '';
+    return `
+    <div class="post-item">
+      <img class="post-item-img" src="${escapeHtml(post.image_url)}" alt="${escapeHtml(post.title)}">
+      <div class="post-item-info">
+        <div class="post-item-title">${escapeHtml(post.title)}</div>
+        <div class="post-item-caption">${escapeHtml(post.caption)}</div>
+        <div class="post-item-date">${escapeHtml(post.date)}${post.tags && post.tags.length ? ' · ' + post.tags.join(', ') : ''}</div>
+      </div>
+      <div class="post-item-actions">
+        <button class="btn-icon danger" onclick="deletePost('${post.id}', ${path ? "'" + escapeHtml(path) + "'" : 'null'})" title="Delete">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============ MIGRATE localStorage POSTS ============
+async function migrateLocalStoragePosts() {
+  let stored = [];
+  try { stored = JSON.parse(localStorage.getItem('galleryPosts') || '[]'); } catch {}
+  if (stored.length === 0) return;
+
+  showToast('Migrating ' + stored.length + ' post(s) to cloud...');
+
+  for (const post of stored) {
+    try {
+      // Upload image (base64 data URL from localStorage)
+      const { url } = await uploadImage(post.image);
+
+      // Insert record
+      await sb.from('posts').insert({
+        title: post.title || 'Untitled',
+        caption: post.caption || '',
+        date: post.date || '',
+        tags: post.tags || [],
+        image_url: url
+      });
+    } catch (err) {
+      console.error('Migration failed for post:', post.title, err);
+    }
+  }
+
+  // Clear localStorage after successful migration
+  localStorage.removeItem('galleryPosts');
+  showToast('Migration complete! Posts are now in the cloud.');
+  await renderPostList();
+}
+
+// ============ TOAST ============
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 3000);
+}
+</script>
+</body>
+</html>

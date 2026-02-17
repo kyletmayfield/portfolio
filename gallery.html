@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyle Lamb | Life</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;600;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ice-deep: #0a1628;
+  --ice-dark: #0f1f3a;
+  --ice-mid: #1a3152;
+  --ice-light: #2a4a6b;
+  --ice-glow: #4a8bbe;
+  --ice-bright: #7ec8e3;
+  --ice-frost: #b8e4f0;
+  --ice-white: #e8f4f8;
+  --orange-deep: #c2410c;
+  --orange-warm: #ea580c;
+  --orange-bright: #f97316;
+  --orange-light: #fb923c;
+  --orange-pale: #fdba74;
+  --snow: #f0f7fa;
+  --text-primary: #e8f4f8;
+  --text-secondary: #7ec8e3;
+  --text-muted: #4a8bbe;
+  --card-bg: rgba(15, 31, 58, 0.85);
+  --card-border: rgba(74, 139, 190, 0.2);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  background: var(--ice-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Aurora Background */
+.aurora-bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.aurora-bg::before {
+  content: ''; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+  background:
+    radial-gradient(ellipse 40% 30% at 30% 20%, rgba(74, 139, 190, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 25% at 70% 60%, rgba(249, 115, 22, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 50% 80%, rgba(74, 139, 190, 0.06) 0%, transparent 70%);
+  animation: auroraDrift 25s ease-in-out infinite;
+}
+@keyframes auroraDrift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(3%, -2%) rotate(1deg); }
+  66% { transform: translate(-2%, 3%) rotate(-1deg); }
+}
+
+/* Snowfall */
+.snowfall { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.snowflake {
+  position: absolute; width: 3px; height: 3px;
+  background: rgba(232, 244, 248, 0.3); border-radius: 50%;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+  10% { opacity: 1; } 90% { opacity: 1; }
+  100% { transform: translateY(110vh) translateX(var(--drift)); opacity: 0; }
+}
+
+/* Falling Oranges */
+.falling-orange {
+  position: fixed; font-size: 1.5rem; opacity: 0;
+  animation: orangeFall linear infinite; pointer-events: none; z-index: 1;
+}
+@keyframes orangeFall {
+  0% { transform: translateY(-5vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.6; } 80% { opacity: 0.6; }
+  100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+}
+
+/* Navigation */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(10, 22, 40, 0.8); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border); transition: all 0.3s ease;
+}
+.nav.scrolled { padding: 0.6rem 2rem; background: rgba(10, 22, 40, 0.95); }
+.nav-logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em; color: var(--text-primary); cursor: pointer; text-decoration: none; }
+.nav-logo span { color: var(--orange-bright); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;
+  font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  transition: color 0.3s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--orange-bright); transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--orange-bright); }
+.nav-links a:hover::after { width: 100%; }
+
+/* Main content */
+.main { position: relative; z-index: 2; }
+
+/* Page header */
+.page-header {
+  text-align: center; padding: 7rem 2rem 2rem;
+}
+.page-header h1 {
+  font-size: clamp(2rem, 5vw, 3rem); font-weight: 800;
+  letter-spacing: -0.02em; margin-bottom: 0.5rem;
+}
+.page-header h1 .accent {
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.page-header .subtitle {
+  font-family: 'Crimson Pro', serif; font-size: 1.15rem;
+  color: var(--text-secondary); font-style: italic; max-width: 500px; margin: 0 auto;
+}
+
+/* Feed Layout */
+.gallery-section {
+  max-width: 600px; margin: 0 auto; padding: 2rem;
+}
+
+.gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.gallery-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-card:hover {
+  border-color: rgba(74, 139, 190, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(74, 139, 190, 0.08);
+}
+
+.gallery-card-img {
+  width: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+
+.gallery-card-body { padding: 1.25rem 1.5rem 1.5rem; }
+
+.gallery-card-title {
+  font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 0.35rem; letter-spacing: -0.01em;
+}
+
+.gallery-card-caption {
+  font-family: 'Crimson Pro', serif; font-size: 0.95rem;
+  color: var(--text-secondary); line-height: 1.5; font-style: italic;
+}
+
+.gallery-card-date {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  color: var(--text-muted); margin-top: 0.75rem; letter-spacing: 0.02em;
+}
+
+.gallery-card-tags {
+  display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem;
+}
+.gallery-tag {
+  padding: 0.2rem 0.55rem; border-radius: 6px; font-size: 0.65rem;
+  font-weight: 600; font-family: 'JetBrains Mono', monospace;
+  background: rgba(249, 115, 22, 0.12); color: var(--orange-light);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+/* Empty state */
+.gallery-empty {
+  text-align: center; padding: 4rem 2rem;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 16px; backdrop-filter: blur(10px);
+}
+.gallery-empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.6; }
+.gallery-empty h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+.gallery-empty p { font-family: 'Crimson Pro', serif; color: var(--text-secondary); font-style: italic; }
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(10, 22, 40, 0.95); backdrop-filter: blur(20px);
+  display: none; justify-content: center; align-items: center;
+  padding: 2rem; cursor: pointer;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 90vw; max-height: 85vh; border-radius: 12px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+  animation: modalIn 0.3s ease-out;
+}
+.lightbox-close {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  width: 44px; height: 44px; border-radius: 10px;
+  background: rgba(74, 139, 190, 0.15); border: 1px solid var(--card-border);
+  color: var(--text-secondary); font-size: 1.4rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+}
+.lightbox-close:hover { background: rgba(249, 115, 22, 0.15); color: var(--orange-bright); border-color: rgba(249, 115, 22, 0.3); }
+
+@keyframes modalIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 2rem; border-top: 1px solid var(--card-border);
+  font-size: 0.8rem; color: var(--text-muted); margin-top: 4rem;
+}
+.footer span { color: var(--orange-bright); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .gallery-section { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg"></div>
+<div class="snowfall" id="snowfall"></div>
+
+<!-- Falling Oranges -->
+<div class="falling-orange" style="left: 12%; animation-duration: 20s; animation-delay: 1s;">🍊</div>
+<div class="falling-orange" style="left: 30%; animation-duration: 18s; animation-delay: 4s;">🍊</div>
+<div class="falling-orange" style="left: 50%; animation-duration: 22s; animation-delay: 0s;">🍊</div>
+<div class="falling-orange" style="left: 70%; animation-duration: 19s; animation-delay: 6s;">🍊</div>
+<div class="falling-orange" style="left: 88%; animation-duration: 21s; animation-delay: 3s;">🍊</div>
+<div class="falling-orange" style="left: 40%; animation-duration: 24s; animation-delay: 9s;">🍊</div>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">Kyle <span>Lamb</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="resume.html">Resume</a></li>
+    <li><a href="gallery.html" style="color: var(--orange-bright);">Life</a></li>
+  </ul>
+</nav>
+
+<div class="main">
+
+  <div class="page-header">
+    <h1>Beyond the <span class="accent">Code</span></h1>
+    <p class="subtitle">Life events, adventures, pets, and the moments that make it all worth it.</p>
+  </div>
+
+  <div class="gallery-section">
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Gallery cards are rendered from the posts array below -->
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Built with ❄️ and <span>🍊</span> by Kyle Lamb — 2026</p>
+    <a href="upload.html" style="display:inline-block;margin-top:0.5rem;font-size:0.7rem;color:var(--text-muted);text-decoration:none;opacity:0.4;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.4'">Manage</a>
+  </footer>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// Supabase
+const SUPABASE_URL = 'https://gfitbasveibyzgplqxue.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmaXRiYXN2ZWlieXpncGxxeHVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDgyODYsImV4cCI6MjA4NjkyNDI4Nn0.ueng-rRlipixqPuHwgMbQePIN1uZpZhnbyr47yTx0Hw';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Snowfall
+function createSnowfall() {
+  const container = document.getElementById('snowfall');
+  for (let i = 0; i < 40; i++) {
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.style.left = Math.random() * 100 + '%';
+    flake.style.width = flake.style.height = (Math.random() * 3 + 1) + 'px';
+    flake.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    flake.style.animationDelay = (Math.random() * 15) + 's';
+    flake.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    flake.style.opacity = Math.random() * 0.4 + 0.1;
+    container.appendChild(flake);
+  }
+}
+createSnowfall();
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ============ GALLERY POSTS (Supabase) ============
+async function loadPosts() {
+  const { data, error } = await sb
+    .from('posts')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error loading posts:', error);
+    return [];
+  }
+  return data || [];
+}
+
+// ============ RENDER GALLERY ============
+function renderGallery(posts) {
+  const grid = document.getElementById('galleryGrid');
+
+  if (!posts || posts.length === 0) {
+    grid.innerHTML = `
+      <div class="gallery-empty" style="grid-column: 1 / -1;">
+        <div class="gallery-empty-icon">📸</div>
+        <h3>Coming Soon</h3>
+        <p>Life moments, adventures, and memories will be shared here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = posts.map((post, i) => `
+    <div class="gallery-card" style="animation: fadeUp 0.6s ease-out ${i * 0.1}s both;">
+      <img class="gallery-card-img" src="${post.image_url}" alt="${escapeHtml(post.title)}" onclick="openLightbox(this.src)" loading="lazy">
+      <div class="gallery-card-body">
+        <div class="gallery-card-title">${escapeHtml(post.title)}</div>
+        <div class="gallery-card-caption">${escapeHtml(post.caption)}</div>
+        ${post.tags && post.tags.length ? `<div class="gallery-card-tags">${post.tags.map(t => `<span class="gallery-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+        <div class="gallery-card-date">${escapeHtml(post.date)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Show loading, then fetch
+(async () => {
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1;"><div class="gallery-empty-icon">⏳</div><h3>Loading...</h3></div>';
+  const posts = await loadPosts();
+  renderGallery(posts);
+})();
+
+// ============ LIGHTBOX ============
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// Fade-up animation
+const style = document.createElement('style');
+style.textContent = '@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

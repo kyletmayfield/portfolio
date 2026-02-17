@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyle Lamb | Resume</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;600;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ice-deep: #0a1628;
+  --ice-dark: #0f1f3a;
+  --ice-mid: #1a3152;
+  --ice-light: #2a4a6b;
+  --ice-glow: #4a8bbe;
+  --ice-bright: #7ec8e3;
+  --ice-frost: #b8e4f0;
+  --ice-white: #e8f4f8;
+  --orange-deep: #c2410c;
+  --orange-warm: #ea580c;
+  --orange-bright: #f97316;
+  --orange-light: #fb923c;
+  --orange-pale: #fdba74;
+  --snow: #f0f7fa;
+  --text-primary: #e8f4f8;
+  --text-secondary: #7ec8e3;
+  --text-muted: #4a8bbe;
+  --card-bg: rgba(15, 31, 58, 0.85);
+  --card-border: rgba(74, 139, 190, 0.2);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  background: var(--ice-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Aurora Background */
+.aurora-bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.aurora-bg::before {
+  content: ''; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+  background:
+    radial-gradient(ellipse 40% 30% at 30% 20%, rgba(74, 139, 190, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 25% at 70% 60%, rgba(249, 115, 22, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 50% 80%, rgba(74, 139, 190, 0.06) 0%, transparent 70%);
+  animation: auroraDrift 25s ease-in-out infinite;
+}
+@keyframes auroraDrift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(3%, -2%) rotate(1deg); }
+  66% { transform: translate(-2%, 3%) rotate(-1deg); }
+}
+
+/* Snowfall */
+.snowfall { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.snowflake {
+  position: absolute; width: 3px; height: 3px;
+  background: rgba(232, 244, 248, 0.3); border-radius: 50%;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+  10% { opacity: 1; } 90% { opacity: 1; }
+  100% { transform: translateY(110vh) translateX(var(--drift)); opacity: 0; }
+}
+
+/* Falling Oranges */
+.falling-orange {
+  position: fixed; font-size: 1.5rem; opacity: 0;
+  animation: orangeFall linear infinite; pointer-events: none; z-index: 1;
+}
+@keyframes orangeFall {
+  0% { transform: translateY(-5vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.6; } 80% { opacity: 0.6; }
+  100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+}
+
+/* Navigation */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(10, 22, 40, 0.8); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border); transition: all 0.3s ease;
+}
+.nav.scrolled { padding: 0.6rem 2rem; background: rgba(10, 22, 40, 0.95); }
+.nav-logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em; color: var(--text-primary); cursor: pointer; text-decoration: none; }
+.nav-logo span { color: var(--orange-bright); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;
+  font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  transition: color 0.3s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--orange-bright); transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--orange-bright); }
+.nav-links a:hover::after { width: 100%; }
+
+/* Main content */
+.main { position: relative; z-index: 2; }
+
+/* Password Gate */
+.password-gate {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center; padding: 2rem;
+}
+.password-gate h2 {
+  font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem;
+}
+.password-gate .subtitle {
+  font-family: 'Crimson Pro', serif; font-size: 1.15rem;
+  color: var(--text-secondary); font-style: italic; margin-bottom: 2rem;
+}
+.password-gate .lock-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.8; }
+.password-form { display: flex; gap: 0.75rem; align-items: center; }
+.password-form input {
+  padding: 0.8rem 1.5rem; border-radius: 10px; border: 1px solid var(--card-border);
+  background: var(--card-bg); color: var(--text-primary); font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem; backdrop-filter: blur(10px); outline: none; width: 260px;
+  transition: border-color 0.3s;
+}
+.password-form input:focus { border-color: var(--orange-bright); }
+.password-form input::placeholder { color: var(--text-muted); }
+.password-form button {
+  padding: 0.8rem 2rem; border-radius: 10px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-warm));
+  color: white; font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700; font-size: 0.9rem; letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3); transition: all 0.3s;
+}
+.password-form button:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(249, 115, 22, 0.4); }
+.password-error {
+  color: #ef4444; font-size: 0.85rem; margin-top: 1rem;
+  opacity: 0; transition: opacity 0.3s;
+}
+.password-error.visible { opacity: 1; }
+
+/* Resume Content (hidden until authenticated) */
+.resume-content { display: none; padding: 6rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
+.resume-content.visible { display: block; }
+
+/* Resume Header */
+.resume-header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--card-border); }
+.resume-name {
+  font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800;
+  letter-spacing: -0.03em; margin-bottom: 0.75rem;
+}
+.resume-name .accent {
+  background: linear-gradient(135deg, var(--orange-bright), var(--orange-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.resume-contact { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 0.75rem; }
+.resume-contact a, .resume-contact span {
+  color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.3s;
+}
+.resume-contact a:hover { color: var(--orange-bright); }
+.resume-contact .sep { color: var(--text-muted); }
+
+/* Section blocks */
+.resume-section { margin-bottom: 2.5rem; }
+.resume-section-title {
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--orange-bright);
+  margin-bottom: 1rem; padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+.resume-summary {
+  font-family: 'Crimson Pro', serif; font-size: 1.1rem;
+  color: var(--text-secondary); line-height: 1.7; font-style: italic;
+}
+
+/* Skills grid */
+.skills-inline { display: flex; flex-direction: column; gap: 0.75rem; }
+.skill-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: baseline; }
+.skill-label {
+  font-weight: 700; font-size: 0.85rem; color: var(--text-primary);
+  min-width: 170px; flex-shrink: 0;
+}
+.skill-values {
+  font-family: 'Crimson Pro', serif; font-size: 0.95rem;
+  color: var(--text-secondary); line-height: 1.5;
+}
+
+/* Experience / Project cards */
+.resume-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 14px; padding: 1.8rem; margin-bottom: 1.25rem;
+  backdrop-filter: blur(10px); transition: border-color 0.3s;
+}
+.resume-card:hover { border-color: rgba(74, 139, 190, 0.35); }
+.resume-card-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.resume-card-title { font-size: 1.15rem; font-weight: 700; }
+.resume-card-title .company { color: var(--text-secondary); font-weight: 400; }
+.resume-card-meta {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+  color: var(--text-muted); letter-spacing: 0.02em;
+}
+.resume-card-subtitle {
+  font-family: 'Crimson Pro', serif; font-size: 0.95rem;
+  color: var(--text-secondary); font-style: italic; margin-bottom: 0.75rem; line-height: 1.5;
+}
+.resume-card-link {
+  color: var(--orange-bright); text-decoration: none; font-size: 0.85rem;
+  font-weight: 600; transition: color 0.3s;
+}
+.resume-card-link:hover { color: var(--orange-light); }
+.resume-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.resume-bullets li {
+  font-size: 0.9rem; color: var(--text-secondary); padding-left: 1.5rem;
+  position: relative; line-height: 1.5;
+}
+.resume-bullets li::before {
+  content: '\25B8'; position: absolute; left: 0; color: var(--orange-bright); font-weight: bold;
+}
+
+/* Education & Patent */
+.resume-simple { margin-bottom: 0.75rem; }
+.resume-simple-title { font-weight: 700; font-size: 1rem; }
+.resume-simple-sub { font-family: 'Crimson Pro', serif; font-size: 0.95rem; color: var(--text-secondary); font-style: italic; }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 2rem; border-top: 1px solid var(--card-border);
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.footer span { color: var(--orange-bright); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .resume-content { padding: 5rem 1.5rem 2rem; }
+  .resume-card-header { flex-direction: column; gap: 0.25rem; }
+  .skill-label { min-width: unset; width: 100%; }
+  .password-form { flex-direction: column; }
+  .password-form input { width: 100%; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg"></div>
+<div class="snowfall" id="snowfall"></div>
+
+<!-- Falling Oranges -->
+<div class="falling-orange" style="left: 8%; animation-duration: 18s; animation-delay: 0s;">🍊</div>
+<div class="falling-orange" style="left: 22%; animation-duration: 22s; animation-delay: 3s;">🍊</div>
+<div class="falling-orange" style="left: 45%; animation-duration: 20s; animation-delay: 7s;">🍊</div>
+<div class="falling-orange" style="left: 67%; animation-duration: 19s; animation-delay: 2s;">🍊</div>
+<div class="falling-orange" style="left: 85%; animation-duration: 24s; animation-delay: 5s;">🍊</div>
+<div class="falling-orange" style="left: 35%; animation-duration: 21s; animation-delay: 10s;">🍊</div>
+<div class="falling-orange" style="left: 55%; animation-duration: 17s; animation-delay: 8s;">🍊</div>
+<div class="falling-orange" style="left: 78%; animation-duration: 23s; animation-delay: 1s;">🍊</div>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">Kyle <span>Lamb</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="resume.html" style="color: var(--orange-bright);">Resume</a></li>
+    <li><a href="gallery.html">Life</a></li>
+  </ul>
+</nav>
+
+<div class="main">
+
+  <!-- Password Gate -->
+  <div class="password-gate" id="passwordGate">
+    <div class="lock-icon">🔒</div>
+    <h2>Private <span style="color: var(--orange-bright);">Resume</span></h2>
+    <p class="subtitle">Enter the password to view my full resume.</p>
+    <div class="password-form">
+      <input type="password" id="passwordInput" placeholder="Enter password..." onkeydown="if(event.key==='Enter')checkPassword()" autofocus>
+      <button onclick="checkPassword()">Unlock</button>
+    </div>
+    <div class="password-error" id="passwordError">Incorrect password. Try again.</div>
+  </div>
+
+  <!-- Resume Content (hidden) -->
+  <div class="resume-content" id="resumeContent">
+
+    <div class="resume-header" style="animation: fadeUp 0.8s ease-out both;">
+      <h1 class="resume-name">Kyle D. <span class="accent">Lamb</span></h1>
+      <div class="resume-contact">
+        <span>St. Petersburg, FL</span>
+        <span class="sep">|</span>
+        <a href="tel:7279008417">(727) 900-8417</a>
+        <span class="sep">|</span>
+        <a href="mailto:KyleDavidLamb@gmail.com">KyleDavidLamb@gmail.com</a>
+        <span class="sep">|</span>
+        <a href="https://www.linkedin.com/in/kyle-d-lamb/" target="_blank">LinkedIn</a>
+        <span class="sep">|</span>
+        <a href="https://github.com/kyletmayfield" target="_blank">GitHub</a>
+      </div>
+    </div>
+
+    <!-- Professional Summary -->
+    <div class="resume-section" style="animation: fadeUp 0.8s ease-out 0.1s both;">
+      <div class="resume-section-title">Professional Summary</div>
+      <p class="resume-summary">
+        Full-stack developer and AI product builder with experience designing, building, and deploying production SaaS applications powered by large language models. Built The Social Fox — an AI-powered caption generator with a patented learning system — from architecture through patent filing, integrating Anthropic's Claude API for vision analysis and text generation. Combines hands-on development (React, PostgreSQL, serverless functions) with practical AI integration skills including prompt engineering, LLM API design, and AI-assisted development workflows. Background in software support, infrastructure, and consulting provides strong foundation in debugging, system design, and shipping under real-world constraints.
+      </p>
+    </div>
+
+    <!-- Technical Skills -->
+    <div class="resume-section" style="animation: fadeUp 0.8s ease-out 0.2s both;">
+      <div class="resume-section-title">Technical Skills</div>
+      <div class="skills-inline">
+        <div class="skill-row">
+          <div class="skill-label">AI & LLM Integration</div>
+          <div class="skill-values">Anthropic Claude API (text + vision), prompt engineering, persona-based prompt compilation, context injection, AI-assisted development (Claude Code, ChatGPT)</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Frontend</div>
+          <div class="skill-values">React 18, JavaScript (ES6+), HTML5, CSS3, Vite, react-router-dom, responsive design</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Backend & Database</div>
+          <div class="skill-values">Supabase (PostgreSQL), Row Level Security, Edge Functions (Deno), REST APIs, database schema design, SQL migrations</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Payments & SaaS</div>
+          <div class="skill-values">Stripe (Checkout, Webhooks, Subscriptions), tiered subscription management, usage metering</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">DevOps & Tools</div>
+          <div class="skill-values">Git, GitHub, Supabase CLI, PowerShell, Bash, Vercel/Netlify deployment</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Additional</div>
+          <div class="skill-values">Figma, Jira, technical documentation, cross-browser testing, WCAG accessibility</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="resume-section" style="animation: fadeUp 0.8s ease-out 0.3s both;">
+      <div class="resume-section-title">Projects</div>
+
+      <div class="resume-card">
+        <div class="resume-card-header">
+          <div class="resume-card-title">The Social Fox <span class="company">| Founder & Sole Developer</span></div>
+          <div class="resume-card-meta">January 2026 – Present</div>
+        </div>
+        <div style="margin-bottom: 0.5rem;">
+          <a class="resume-card-link" href="https://www.thesocialfox.net" target="_blank">thesocialfox.com</a>
+          <span style="color: var(--text-muted); margin: 0 0.5rem;">|</span>
+          <a class="resume-card-link" href="https://github.com/kyletmayfield/TheSocialFox-Portfolio" target="_blank">GitHub</a>
+        </div>
+        <p class="resume-card-subtitle">AI-powered SaaS platform that generates social media captions matching a user's brand voice. Built end-to-end as a solo developer — architecture, frontend, backend, AI integration, payments, and patent filing.</p>
+        <ul class="resume-bullets">
+          <li>Architected full-stack application with React 18, Supabase (PostgreSQL), Stripe, and Anthropic Claude API</li>
+          <li>Designed prompt engineering system that compiles user persona data (topics, tones, audience, catchphrases, emoji/hashtag preferences) into optimized Claude API prompts with vision analysis</li>
+          <li>Built serverless Edge Functions (Deno) to securely proxy Claude API and Stripe calls, keeping API keys server-side</li>
+          <li>Designed PostgreSQL schema with 9+ tables, Row Level Security policies, and incremental SQL migrations</li>
+          <li>Implemented 6-tier subscription system (Free through Enterprise) with Stripe Checkout, webhooks, and usage metering</li>
+          <li>Developed patented AI learning system (USPTO Provisional #63/974,681) enabling personas to learn from user edits using edit-delta analysis and probability-based scoring</li>
+          <li>Built photo library with EXIF extraction, multi-photo carousel, smart shuffle, content scheduling, Google Calendar integration, affiliate system, and admin panel</li>
+          <li>Shipped production application with error boundaries, offline detection, toast notifications, and onboarding flow</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Professional Experience -->
+    <div class="resume-section" style="animation: fadeUp 0.8s ease-out 0.4s both;">
+      <div class="resume-section-title">Professional Experience</div>
+
+      <div class="resume-card">
+        <div class="resume-card-header">
+          <div class="resume-card-title">Junior Developer <span class="company">| Centurion Cares | Oldsmar, FL</span></div>
+          <div class="resume-card-meta">June 2025 – Present</div>
+        </div>
+        <ul class="resume-bullets">
+          <li>Resolved persistent web chat widget reliability issues deployed across 100+ enterprise client sites through systematic cross-browser and cross-device debugging</li>
+          <li>Designed and built browser-based chat UI components with responsive HTML/CSS for mobile and desktop</li>
+          <li>Collaborated with senior developers on mobile web chat application from conception through launch</li>
+          <li>Leveraged AI tools (Claude, ChatGPT) for code scaffolding, documentation, and UI/UX optimization</li>
+        </ul>
+      </div>
+
+      <div class="resume-card">
+        <div class="resume-card-header">
+          <div class="resume-card-title">Software Support Specialist III <span class="company">| Centurion Cares | Oldsmar, FL</span></div>
+          <div class="resume-card-meta">March 2024 – May 2025</div>
+        </div>
+        <ul class="resume-bullets">
+          <li>Automated repetitive workflows using PowerShell scripting, improving operational efficiency by 25%</li>
+          <li>Provided advanced technical support for financial, government, and utility sector clients across production and DR systems</li>
+          <li>Analyzed log files, traces, and Wireshark packet captures to diagnose and resolve complex system issues</li>
+          <li>Built and optimized IVR call flows; tracked tickets and development workflows in Jira</li>
+        </ul>
+      </div>
+
+      <div class="resume-card">
+        <div class="resume-card-header">
+          <div class="resume-card-title">Web Design & Digital Growth Consultant <span class="company">| Independent</span></div>
+          <div class="resume-card-meta">2024 – Present</div>
+        </div>
+        <ul class="resume-bullets">
+          <li>Delivered end-to-end website development for small business clients: requirements, design, build, SEO, and launch</li>
+          <li>Built SEO-optimized, mobile-responsive sites with conversion-focused layouts and WCAG accessibility</li>
+          <li>Managed multiple concurrent client projects with scope definition, milestones, and budget tracking</li>
+        </ul>
+      </div>
+
+      <div class="resume-card">
+        <div class="resume-card-header">
+          <div class="resume-card-title">Data Center Infrastructure Technician <span class="company">| Amazon Web Services | Columbus, OH</span></div>
+          <div class="resume-card-meta">October 2013 – January 2015</div>
+        </div>
+        <ul class="resume-bullets">
+          <li>Installed and maintained large-scale data center infrastructure including server racks, switches, and cabling</li>
+          <li>Collaborated with engineering teams on system configuration and quality validation across project phases</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="resume-section" style="animation: fadeUp 0.8s ease-out 0.5s both;">
+      <div class="resume-section-title">Education</div>
+      <div class="resume-card">
+        <div class="resume-simple">
+          <div class="resume-simple-title">Associate of Science in Computer Programming & Analysis</div>
+          <div class="resume-simple-sub">St. Petersburg College | St. Petersburg, FL</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patent -->
+    <div class="resume-section" style="animation: fadeUp 0.8s ease-out 0.6s both;">
+      <div class="resume-section-title">Patent</div>
+      <div class="resume-card">
+        <div class="resume-simple">
+          <div class="resume-simple-title">USPTO Provisional Application #63/974,681 <span class="company" style="font-size: 0.9rem;">(Filed February 2026)</span></div>
+          <div class="resume-simple-sub">AI Learning System for persona-based content generation — edit-delta analysis with probability-based scoring and hierarchical propagation</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Built with ❄️ and <span>🍊</span> by Kyle Lamb — 2026</p>
+  </footer>
+</div>
+
+<script>
+// Snowfall
+function createSnowfall() {
+  const container = document.getElementById('snowfall');
+  for (let i = 0; i < 40; i++) {
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.style.left = Math.random() * 100 + '%';
+    flake.style.width = flake.style.height = (Math.random() * 3 + 1) + 'px';
+    flake.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    flake.style.animationDelay = (Math.random() * 15) + 's';
+    flake.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    flake.style.opacity = Math.random() * 0.4 + 0.1;
+    container.appendChild(flake);
+  }
+}
+createSnowfall();
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Password check
+function checkPassword() {
+  const input = document.getElementById('passwordInput');
+  const error = document.getElementById('passwordError');
+  if (input.value === 'YOUR_PASSWORD_HERE') {
+    document.getElementById('passwordGate').style.display = 'none';
+    document.getElementById('resumeContent').classList.add('visible');
+    sessionStorage.setItem('resumeAuth', 'true');
+  } else {
+    error.classList.add('visible');
+    input.value = '';
+    input.focus();
+  }
+}
+
+// Auto-unlock if already authenticated in this session
+if (sessionStorage.getItem('resumeAuth') === 'true') {
+  document.getElementById('passwordGate').style.display = 'none';
+  document.getElementById('resumeContent').classList.add('visible');
+}
+</script>
+</body>
+</html>
