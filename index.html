@@ -192,20 +192,347 @@ body {
   overflow: hidden;
 }
 
-/* Polar bear silhouette */
-.polar-bear {
-  position: absolute;
-  bottom: -20px;
-  right: 5%;
-  width: 280px;
-  height: 280px;
-  opacity: 0.06;
-  animation: bearBreathe 6s ease-in-out infinite;
+/* GIANT ORANGE - hero text container */
+.ice-cap {
+  position: relative;
+  z-index: 2;
+  width: min(720px, 92vw);
+  height: min(720px, 92vw);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 4.5rem;
+  background:
+    /* Continent-like patches — lighter golden landmasses */
+    radial-gradient(ellipse 35% 25% at 28% 38%, rgba(220, 150, 40, 0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 22% 40% at 72% 30%, rgba(210, 160, 50, 0.15) 0%, transparent 100%),
+    radial-gradient(ellipse 28% 18% at 58% 68%, rgba(200, 140, 30, 0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 28% at 20% 72%, rgba(210, 160, 60, 0.12) 0%, transparent 100%),
+    radial-gradient(ellipse 14% 12% at 82% 58%, rgba(200, 135, 25, 0.14) 0%, transparent 100%),
+    /* 3D sphere lighting */
+    radial-gradient(circle at 32% 25%, rgba(255, 200, 100, 0.4) 0%, transparent 28%),
+    radial-gradient(circle at 72% 78%, rgba(60, 15, 0, 0.5) 0%, transparent 30%),
+    /* Base burnt orange sphere */
+    radial-gradient(circle at 50% 50%, #d4600e 0%, #b8480a 28%, #983808 50%, #7a2a06 75%, #5c1e04 100%);
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.6),
+    0 0 120px rgba(200, 90, 15, 0.1),
+    inset 0 -30px 50px rgba(60, 20, 5, 0.5),
+    inset 0 25px 50px rgba(220, 160, 60, 0.15),
+    inset -20px 0 40px rgba(100, 35, 10, 0.2);
 }
 
-@keyframes bearBreathe {
-  0%, 100% { transform: scale(1) translateY(0); }
-  50% { transform: scale(1.02) translateY(-5px); }
+/* Subtle citrus skin texture */
+.ice-cap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(circle, rgba(255, 220, 120, 0.06) 1px, transparent 1px),
+    radial-gradient(circle, rgba(180, 100, 30, 0.04) 1px, transparent 1px);
+  background-size: 8px 8px, 11px 11px;
+  background-position: 0 0, 4px 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Glossy specular highlight */
+.ice-cap::after {
+  content: '';
+  position: absolute;
+  top: 6%;
+  left: 18%;
+  width: 30%;
+  height: 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 70%);
+  transform: rotate(-20deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Globe grid overlay */
+.globe-grid {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cellipse cx='100' cy='100' rx='96' ry='16' fill='none' stroke='white' stroke-opacity='0.13' stroke-width='0.7'/%3E%3Cellipse cx='100' cy='58' rx='82' ry='12' fill='none' stroke='white' stroke-opacity='0.10' stroke-width='0.6'/%3E%3Cellipse cx='100' cy='142' rx='82' ry='12' fill='none' stroke='white' stroke-opacity='0.10' stroke-width='0.6'/%3E%3Cellipse cx='100' cy='26' rx='52' ry='7' fill='none' stroke='white' stroke-opacity='0.07' stroke-width='0.5'/%3E%3Cellipse cx='100' cy='174' rx='52' ry='7' fill='none' stroke='white' stroke-opacity='0.07' stroke-width='0.5'/%3E%3Cellipse cx='100' cy='100' rx='16' ry='96' fill='none' stroke='white' stroke-opacity='0.11' stroke-width='0.6'/%3E%3Cellipse cx='100' cy='100' rx='50' ry='96' fill='none' stroke='white' stroke-opacity='0.10' stroke-width='0.6'/%3E%3Cellipse cx='100' cy='100' rx='80' ry='96' fill='none' stroke='white' stroke-opacity='0.08' stroke-width='0.6'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Navel dimple at the bottom */
+.orange-navel {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(60, 18, 0, 0.5) 0%, rgba(92, 30, 4, 0.25) 40%, transparent 70%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ============ ORANGE WRAPPER + ORBITS ============ */
+.orange-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: orangeFloat 8s ease-in-out infinite, fadeUp 1s ease-out 0.2s both;
+}
+
+.orbit-tilt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.orbit-dot {
+  position: absolute;
+  border-radius: 50%;
+  will-change: opacity;
+}
+
+/* Orbit 1 — green, wide ellipse */
+.orbit-tilt-1 {
+  transform: scaleY(0.28) rotate(20deg);
+  animation: orbitDepth 18s linear infinite;
+}
+.orbit-tilt-1 .orbit-ring {
+  width: 880px;
+  height: 880px;
+  top: -440px;
+  left: -440px;
+  animation: orbitSpin 18s linear infinite;
+}
+.orbit-tilt-1 .orbit-dot {
+  width: 10px;
+  height: 10px;
+  top: -5px;
+  left: 50%;
+  margin-left: -5px;
+  background: #22c55e;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.7), 0 0 40px rgba(34, 197, 94, 0.2);
+  transform: scaleY(3.57);
+  animation: orbitFade 18s linear infinite;
+}
+
+/* Orbit 2 — warm orange, reverse */
+.orbit-tilt-2 {
+  transform: scaleY(0.32) rotate(-30deg);
+  animation: orbitDepth 25s linear infinite;
+}
+.orbit-tilt-2 .orbit-ring {
+  width: 960px;
+  height: 960px;
+  top: -480px;
+  left: -480px;
+  animation: orbitSpin 25s linear infinite reverse;
+}
+.orbit-tilt-2 .orbit-dot {
+  width: 7px;
+  height: 7px;
+  top: -3.5px;
+  left: 50%;
+  margin-left: -3.5px;
+  background: #fb923c;
+  box-shadow: 0 0 12px rgba(251, 146, 60, 0.7), 0 0 30px rgba(251, 146, 60, 0.2);
+  transform: scaleY(3.125);
+  animation: orbitFade 25s linear infinite;
+}
+
+/* Orbit 3 — ice blue, tight fast */
+.orbit-tilt-3 {
+  transform: scaleY(0.22) rotate(55deg);
+  animation: orbitDepth3 14s linear infinite;
+}
+.orbit-tilt-3 .orbit-ring {
+  width: 820px;
+  height: 820px;
+  top: -410px;
+  left: -410px;
+  animation: orbitSpin 14s linear infinite;
+  border-color: transparent;
+}
+.orbit-tilt-3 .orbit-dot {
+  width: 5px;
+  height: 5px;
+  top: -2.5px;
+  left: 50%;
+  margin-left: -2.5px;
+  background: #7ec8e3;
+  box-shadow: 0 0 10px rgba(126, 200, 227, 0.7), 0 0 25px rgba(126, 200, 227, 0.15);
+  transform: scaleY(4.55);
+  animation: orbitFade3 14s linear infinite;
+}
+
+/* Orbit 4 — white, steep high tilt */
+.orbit-tilt-4 {
+  transform: scaleY(0.18) rotate(-10deg);
+  animation: orbitDepth 22s linear infinite;
+}
+.orbit-tilt-4 .orbit-ring {
+  width: 920px;
+  height: 920px;
+  top: -460px;
+  left: -460px;
+  animation: orbitSpin 22s linear infinite;
+  border-color: rgba(255, 255, 255, 0.03);
+}
+.orbit-tilt-4 .orbit-dot {
+  width: 6px;
+  height: 6px;
+  top: -3px;
+  left: 50%;
+  margin-left: -3px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 25px rgba(255, 255, 255, 0.2);
+  transform: scaleY(5.56);
+  animation: orbitFade 22s linear infinite;
+}
+
+/* Orbit 5 — small green, wide slow */
+.orbit-tilt-5 {
+  transform: scaleY(0.25) rotate(70deg);
+  animation: orbitDepth 30s linear infinite;
+}
+.orbit-tilt-5 .orbit-ring {
+  width: 1000px;
+  height: 1000px;
+  top: -500px;
+  left: -500px;
+  animation: orbitSpin 30s linear infinite reverse;
+  border-color: transparent;
+}
+.orbit-tilt-5 .orbit-dot {
+  width: 4px;
+  height: 4px;
+  top: -2px;
+  left: 50%;
+  margin-left: -2px;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.6), 0 0 20px rgba(74, 222, 128, 0.15);
+  transform: scaleY(4);
+  animation: orbitFade 30s linear infinite;
+}
+
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Dots fade out when behind the orange */
+@keyframes orbitFade {
+  0% { opacity: 0; }
+  15% { opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  85% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* z-index drops below orange background when dot is behind */
+@keyframes orbitDepth {
+  0%, 14% { z-index: -1; }
+  15%, 85% { z-index: 5; }
+  86%, 100% { z-index: -1; }
+}
+
+/* Orbit 3 (blue) — tighter orbit, hide sooner/longer */
+@keyframes orbitFade3 {
+  0% { opacity: 0; }
+  22% { opacity: 0; }
+  32% { opacity: 1; }
+  68% { opacity: 1; }
+  78% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes orbitDepth3 {
+  0%, 22% { z-index: -1; }
+  23%, 77% { z-index: 5; }
+  78%, 100% { z-index: -1; }
+}
+
+/* Stem */
+.orange-stem {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+/* Woody stem trunk */
+.orange-stem::before {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 42px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.25) 0%, transparent 25%, transparent 50%, rgba(255,255,255,0.05) 60%, transparent 75%, rgba(0,0,0,0.2) 100%),
+    linear-gradient(to bottom, #2e1a06, #3d2510, #4d2e12, #5a3820);
+  border-radius: 4px 4px 7px 7px;
+  margin: 0 auto;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4), -1px 0 2px rgba(0,0,0,0.2);
+}
+
+/* Leaf with central vein */
+.orange-stem::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 14px;
+  width: 60px;
+  height: 28px;
+  background:
+    linear-gradient(100deg, transparent 46%, rgba(255,255,255,0.2) 49%, rgba(255,255,255,0.2) 51%, transparent 54%),
+    radial-gradient(ellipse at 50% 50%, #2dd468 0%, #22c55e 35%, #16a34a 70%, #0f7a3b 100%);
+  border-radius: 4px 50% 4px 50%;
+  transform: rotate(-15deg);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.1);
+}
+
+@keyframes orangeFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(0.5deg); }
+  50% { transform: translateY(-4px) rotate(-0.3deg); }
+  75% { transform: translateY(-12px) rotate(0.2deg); }
+}
+
+/* Shadow beneath the orange */
+.ice-water {
+  position: relative;
+  z-index: 1;
+  width: 50%;
+  max-width: 350px;
+  height: 8px;
+  margin-top: 12px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.3) 0%, transparent 70%);
+  animation: shadowPulse 8s ease-in-out infinite;
+}
+
+@keyframes shadowPulse {
+  0%, 100% { transform: scaleX(1); opacity: 0.7; }
+  25% { transform: scaleX(0.95); opacity: 0.5; }
+  75% { transform: scaleX(0.93); opacity: 0.45; }
 }
 
 /* Falling oranges */
@@ -225,25 +552,31 @@ body {
 }
 
 .hero-badge {
+  position: relative;
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1.2rem;
-  border: 1px solid var(--card-border);
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgba(34, 197, 94, 0.5);
   border-radius: 100px;
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: #4ade80;
   margin-bottom: 2rem;
-  background: rgba(15, 31, 58, 0.5);
-  backdrop-filter: blur(10px);
-  animation: fadeUp 0.8s ease-out 0.2s both;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.25), 0 4px 15px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .hero-badge .dot {
   width: 6px;
   height: 6px;
-  background: var(--orange-bright);
+  background: #22c55e;
   border-radius: 50%;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -253,73 +586,85 @@ body {
 }
 
 .hero h1 {
+  position: relative;
+  z-index: 3;
   font-size: clamp(2.5rem, 7vw, 5.5rem);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
-  animation: fadeUp 0.8s ease-out 0.4s both;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .hero h1 .accent {
-  background: linear-gradient(135deg, var(--orange-bright), var(--orange-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #22c55e;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
+  position: relative;
+  z-index: 3;
   font-family: 'Crimson Pro', serif;
   font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.85);
   max-width: 600px;
   line-height: 1.6;
   font-weight: 300;
   font-style: italic;
-  margin-bottom: 3rem;
-  animation: fadeUp 0.8s ease-out 0.6s both;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-.hero-cta {
+.hero-links {
+  position: relative;
+  z-index: 3;
   display: flex;
-  gap: 1rem;
-  animation: fadeUp 0.8s ease-out 0.8s both;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-.btn {
-  padding: 0.8rem 2rem;
-  border-radius: 8px;
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-weight: 600;
-  font-size: 0.9rem;
+.hero-links a {
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
   transition: all 0.3s ease;
-  cursor: pointer;
-  border: none;
-  letter-spacing: 0.02em;
+  position: relative;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--orange-bright), var(--orange-warm));
-  color: white;
-  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+.hero-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #22c55e;
+  transition: width 0.3s ease;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(249, 115, 22, 0.4);
+.hero-links a:hover {
+  color: #22c55e;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--card-border);
+.hero-links a:hover::after {
+  width: 100%;
 }
 
-.btn-secondary:hover {
-  border-color: var(--ice-glow);
-  color: var(--text-primary);
-  background: rgba(74, 139, 190, 0.1);
+.link-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.hero-links a:hover .link-arrow {
+  transform: translateX(5px);
+}
+
+.link-divider {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 1.2rem;
 }
 
 /* Scroll indicator */
@@ -443,18 +788,24 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
   margin-bottom: 1.5rem;
   position: relative;
 }
 
-.card-icon.fox { background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.25); }
-.card-icon.tree { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.25); }
-.card-icon.consult { background: rgba(126, 200, 227, 0.15); border: 1px solid rgba(126, 200, 227, 0.25); }
-.card-icon.strategy { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.25); }
-.card-icon.brand { background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.25); }
-.card-icon.voip { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.25); }
-.card-icon.workout { background: rgba(55, 71, 79, 0.15); border: 1px solid rgba(129, 212, 250, 0.3); }
+.card-icon.fox { background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.25); color: var(--orange-bright); }
+.card-icon.tree { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.25); color: #22c55e; }
+.card-icon.consult { background: rgba(126, 200, 227, 0.15); border: 1px solid rgba(126, 200, 227, 0.25); color: var(--ice-bright); }
+.card-icon.strategy { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.25); color: #a855f7; }
+.card-icon.brand { background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.25); color: var(--orange-bright); }
+.card-icon.voip { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; }
+.card-icon.workout { background: rgba(55, 71, 79, 0.15); border: 1px solid rgba(129, 212, 250, 0.3); color: var(--ice-bright); }
+.card-icon.portfoliobuilder { background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.25); color: var(--orange-bright); }
+.card-icon.flowcore { background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.25); color: #06b6d4; }
+.card-icon.brifilter { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.25); color: #10b981; }
 
 .card-title {
   font-size: 1.3rem;
@@ -586,7 +937,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.05em;
   margin-bottom: 1.5rem;
 }
 
@@ -1014,12 +1368,35 @@ body {
   .nav-links { display: none; }
   .about-grid { grid-template-columns: 1fr; }
   .card-grid { grid-template-columns: 1fr; }
-  .hero { padding: 8rem 1.5rem 4rem; }
+  .hero { padding: 6rem 1rem 3rem; }
   .section { padding: 4rem 1.5rem; }
   .modal-content { padding: 2rem; margin-top: 2rem; }
   .modal-stats { grid-template-columns: 1fr 1fr; }
-  .hero-cta { flex-direction: column; align-items: center; }
-  .polar-bear { width: 180px; height: 180px; right: 2%; }
+
+  /* Orange globe — tighter on mobile */
+  .ice-cap { padding: 2rem 1.8rem 2rem; }
+  .hero-badge { font-size: 0.65rem; padding: 0.4rem 0.9rem; margin-bottom: 1rem; }
+  .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+  .hero-subtitle { font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.4; }
+  .hero-links { flex-direction: column; align-items: center; gap: 0.8rem; }
+  .link-divider { display: none; }
+
+  /* Stem + leaf scale down */
+  .orange-stem { top: -22px; transform: translateX(-50%) scale(0.7); }
+
+  /* Hide orbits on small screens — too wide */
+  .orbit-tilt { display: none; }
+
+  /* Shadow beneath */
+  .ice-water { max-width: 200px; }
+}
+
+@media (max-width: 420px) {
+  .ice-cap { padding: 1.8rem 1.5rem; }
+  .hero-badge { font-size: 0.6rem; padding: 0.35rem 0.75rem; }
+  .hero h1 { font-size: 2rem; margin-bottom: 0.75rem; }
+  .hero-subtitle { font-size: 0.85rem; }
+  .hero-links a { font-size: 0.9rem; }
 }
 </style>
 </head>
@@ -1049,41 +1426,56 @@ body {
 
   <!-- HERO -->
   <section class="hero" id="hero">
-    <!-- Polar Bear SVG Silhouette -->
-    <svg class="polar-bear" viewBox="0 0 200 200" fill="currentColor" opacity="0.08">
-      <ellipse cx="100" cy="155" rx="70" ry="40" fill="rgba(126,200,227,0.5)"/>
-      <ellipse cx="100" cy="110" rx="50" ry="55" fill="rgba(184,228,240,0.6)"/>
-      <ellipse cx="100" cy="60" rx="35" ry="30" fill="rgba(184,228,240,0.7)"/>
-      <circle cx="85" cy="52" r="12" fill="rgba(184,228,240,0.7)"/>
-      <circle cx="115" cy="52" r="12" fill="rgba(184,228,240,0.7)"/>
-      <circle cx="85" cy="52" r="6" fill="rgba(74,139,190,0.4)"/>
-      <circle cx="115" cy="52" r="6" fill="rgba(74,139,190,0.4)"/>
-      <circle cx="90" cy="65" r="3" fill="rgba(10,22,40,0.5)"/>
-      <circle cx="110" cy="65" r="3" fill="rgba(10,22,40,0.5)"/>
-      <ellipse cx="100" cy="72" rx="5" ry="3" fill="rgba(10,22,40,0.4)"/>
-    </svg>
-
     <!-- Falling Orange Accents -->
     <div class="falling-orange" style="left: 15%; animation-duration: 12s; animation-delay: 0s; font-size: 1.2rem;">🍊</div>
     <div class="falling-orange" style="left: 75%; animation-duration: 15s; animation-delay: 3s; font-size: 1rem;">🍊</div>
     <div class="falling-orange" style="left: 45%; animation-duration: 18s; animation-delay: 7s; font-size: 0.8rem;">🍊</div>
     <div class="falling-orange" style="left: 88%; animation-duration: 14s; animation-delay: 11s; font-size: 1.1rem;">🍊</div>
+    <div class="falling-orange" style="left: 8%; animation-duration: 16s; animation-delay: 2s; font-size: 0.9rem;">🍊</div>
+    <div class="falling-orange" style="left: 32%; animation-duration: 13s; animation-delay: 5s; font-size: 1.1rem;">🍊</div>
+    <div class="falling-orange" style="left: 55%; animation-duration: 17s; animation-delay: 9s; font-size: 0.7rem;">🍊</div>
+    <div class="falling-orange" style="left: 65%; animation-duration: 11s; animation-delay: 1s; font-size: 1.3rem;">🍊</div>
+    <div class="falling-orange" style="left: 22%; animation-duration: 19s; animation-delay: 13s; font-size: 0.8rem;">🍊</div>
+    <div class="falling-orange" style="left: 92%; animation-duration: 14s; animation-delay: 6s; font-size: 1rem;">🍊</div>
+    <div class="falling-orange" style="left: 3%; animation-duration: 20s; animation-delay: 4s; font-size: 1.2rem;">🍊</div>
+    <div class="falling-orange" style="left: 40%; animation-duration: 10s; animation-delay: 8s; font-size: 0.9rem;">🍊</div>
+    <div class="falling-orange" style="left: 70%; animation-duration: 16s; animation-delay: 0.5s; font-size: 1.4rem;">🍊</div>
+    <div class="falling-orange" style="left: 50%; animation-duration: 13s; animation-delay: 10s; font-size: 0.75rem;">🍊</div>
+    <div class="falling-orange" style="left: 82%; animation-duration: 18s; animation-delay: 3.5s; font-size: 1.1rem;">🍊</div>
+    <div class="falling-orange" style="left: 12%; animation-duration: 11s; animation-delay: 7s; font-size: 1rem;">🍊</div>
+    <div class="falling-orange" style="left: 58%; animation-duration: 15s; animation-delay: 14s; font-size: 0.85rem;">🍊</div>
+    <div class="falling-orange" style="left: 28%; animation-duration: 21s; animation-delay: 1.5s; font-size: 1.3rem;">🍊</div>
+    <div class="falling-orange" style="left: 95%; animation-duration: 12s; animation-delay: 9s; font-size: 0.7rem;">🍊</div>
 
-    <div class="hero-badge">
-      <span class="dot"></span>
-      Developer & Creator · Built to Find Solutions — St. Petersburg, FL
-    </div>
+    <div class="orange-wrapper">
+      <div class="ice-cap">
+        <div class="orange-stem"></div>
+        <div class="orbit-tilt orbit-tilt-1"><div class="orbit-ring"><div class="orbit-dot"></div></div></div>
+        <div class="orbit-tilt orbit-tilt-2"><div class="orbit-ring"><div class="orbit-dot"></div></div></div>
+        <div class="orbit-tilt orbit-tilt-3"><div class="orbit-ring"><div class="orbit-dot"></div></div></div>
+        <div class="orbit-tilt orbit-tilt-4"><div class="orbit-ring"><div class="orbit-dot"></div></div></div>
+        <div class="orbit-tilt orbit-tilt-5"><div class="orbit-ring"><div class="orbit-dot"></div></div></div>
+        <div class="globe-grid"></div>
+        <div class="orange-navel"></div>
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Developer & Creator · Built to Find Solutions — St. Petersburg, FL
+        </div>
 
-    <h1>Kyle <span class="accent">Lamb</span></h1>
+        <h1>Kyle <span class="accent">Lamb</span></h1>
 
-    <p class="hero-subtitle">
-      Building AI-powered products, real businesses, and everything in between.
-      From self-learning caption engines to tree service marketing — shipping things that matter.
-    </p>
+        <p class="hero-subtitle">
+          Building AI-powered products, real businesses, and everything in between.
+          From self-learning caption engines to tree service marketing — shipping things that matter.
+        </p>
 
-    <div class="hero-cta">
-      <a href="#projects" class="btn btn-primary" onclick="scrollToSection('projects')">View My Work</a>
-      <a href="#about" class="btn btn-secondary" onclick="scrollToSection('about')">The Story</a>
+        <div class="hero-links">
+          <a href="#projects" onclick="scrollToSection('projects')">View My Work <span class="link-arrow">→</span></a>
+          <span class="link-divider">·</span>
+          <a href="#about" onclick="scrollToSection('about')">The Story <span class="link-arrow">→</span></a>
+        </div>
+      </div>
+      <div class="ice-water"></div>
     </div>
 
     <div class="scroll-indicator">
@@ -1108,7 +1500,7 @@ body {
       <!-- TheSocialFox -->
       <div class="project-card" onclick="openModal('socialfox')">
         <div class="card-arrow">↗</div>
-        <div class="card-icon fox">🦊</div>
+        <div class="card-icon fox">SF</div>
         <h3 class="card-title">TheSocialFox</h3>
         <p class="card-subtitle">AI-powered social media caption generator with a self-learning persona engine that adapts to your voice.</p>
         <div class="card-tags">
@@ -1121,10 +1513,40 @@ body {
         </div>
       </div>
 
+      <!-- FlowCore -->
+      <div class="project-card" onclick="openModal('flowcore')">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon flowcore">FC</div>
+        <h3 class="card-title">FlowCore Engine</h3>
+        <p class="card-subtitle">AI workflow orchestration engine with reasoning traces, grade-based confidence scoring, and conditional human-in-the-loop — solving the trust gap in AI automation.</p>
+        <div class="card-tags">
+          <span class="tag highlight">AI / Orchestration</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">React Flow</span>
+          <span class="tag">Claude API</span>
+          <span class="tag">In Development</span>
+        </div>
+      </div>
+
+      <!-- Portfolio Builder -->
+      <div class="project-card" onclick="openModal('portfoliobuilder')">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon portfoliobuilder">PB</div>
+        <h3 class="card-title">AI Portfolio Builder</h3>
+        <p class="card-subtitle">End-to-end product: AI generates custom portfolio websites from a form, with Stripe payments, live chat, and revision system.</p>
+        <div class="card-tags">
+          <span class="tag highlight">Full Product</span>
+          <span class="tag">Claude API</span>
+          <span class="tag">Stripe</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">GitHub Actions</span>
+        </div>
+      </div>
+
       <!-- Business Strategy -->
       <div class="project-card" onclick="openModal('strategy')">
         <div class="card-arrow">↗</div>
-        <div class="card-icon strategy">📊</div>
+        <div class="card-icon strategy">BS</div>
         <h3 class="card-title">SaaS Business Strategy</h3>
         <p class="card-subtitle">Revenue modeling, market analysis, pricing strategy, and patent research for TheSocialFox.</p>
         <div class="card-tags">
@@ -1138,7 +1560,7 @@ body {
       <!-- Branding -->
       <div class="project-card" onclick="openModal('branding')">
         <div class="card-arrow">↗</div>
-        <div class="card-icon brand">🎨</div>
+        <div class="card-icon brand">BM</div>
         <h3 class="card-title">Brand & Marketing</h3>
         <p class="card-subtitle">Full brand identity, logo design, 50+ marketing assets, content strategy, and launch campaigns.</p>
         <div class="card-tags">
@@ -1152,7 +1574,7 @@ body {
       <!-- A to Z Tree -->
       <div class="project-card" onclick="openModal('tree')">
         <div class="card-arrow">↗</div>
-        <div class="card-icon tree">🌲</div>
+        <div class="card-icon tree">AZ</div>
         <h3 class="card-title">A to Z Tree Service</h3>
         <p class="card-subtitle">Digital marketing strategy, Google Ads optimization, and Facebook campaigns for a local tree service.</p>
         <div class="card-tags">
@@ -1166,7 +1588,7 @@ body {
       <!-- Consulting -->
       <div class="project-card" onclick="openModal('consulting')">
         <div class="card-arrow">↗</div>
-        <div class="card-icon consult">💡</div>
+        <div class="card-icon consult">DC</div>
         <h3 class="card-title">Digital Consulting</h3>
         <p class="card-subtitle">Web development, marketing strategy, and technical consulting for local service companies.</p>
         <div class="card-tags">
@@ -1180,7 +1602,7 @@ body {
       <!-- VoIP -->
       <div class="project-card" onclick="openModal('voip')">
         <div class="card-arrow">↗</div>
-        <div class="card-icon voip">📞</div>
+        <div class="card-icon voip">VT</div>
         <h3 class="card-title">VoIP Telecom Support</h3>
         <p class="card-subtitle">Escalated technical support at Centurion Cares — deep packet analysis, SIP troubleshooting, carrier coordination.</p>
         <div class="card-tags">
@@ -1191,10 +1613,24 @@ body {
         </div>
       </div>
 
+      <!-- Brifilter -->
+      <div class="project-card" onclick="openModal('brifilter')">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon brifilter">BF</div>
+        <h3 class="card-title">Brifilter</h3>
+        <p class="card-subtitle">Perceptual image hashing engine that detects duplicate photos across connected social media accounts.</p>
+        <div class="card-tags">
+          <span class="tag highlight">Computer Vision</span>
+          <span class="tag">pHash / DCT</span>
+          <span class="tag">Sharp</span>
+          <span class="tag">Supabase</span>
+        </div>
+      </div>
+
       <!-- Workout Generator -->
       <div class="project-card" onclick="openModal('workoutapp')">
         <div class="card-arrow">↗</div>
-        <div class="card-icon workout">💪</div>
+        <div class="card-icon workout">WG</div>
         <h3 class="card-title">Workout Generator</h3>
         <p class="card-subtitle">WPF desktop app with AI-powered physique analysis, interactive workout logging, and a polar bear arctic theme.</p>
         <div class="card-tags">
@@ -1422,7 +1858,7 @@ function scrollToSection(id) {
 // ============ PROJECT DATA ============
 const projects = {
   socialfox: {
-    icon: '🦊',
+    icon: 'SF',
     iconClass: 'fox',
     title: 'TheSocialFox',
     subtitle: 'An AI-powered social media caption generator that learns your unique voice through a self-evolving persona engine. Built from concept to production as sole founder, developer, and marketer.',
@@ -1496,8 +1932,171 @@ const projects = {
       }
     ]
   },
+  flowcore: {
+    icon: 'FC',
+    iconClass: 'flowcore',
+    title: 'FlowCore Engine',
+    subtitle: 'A reusable AI workflow orchestration engine where every AI decision is transparent, testable, and graded for confidence. Built as a shared engine powering both a visual workflow builder (FlowPilot) and multi-platform caption generation in TheSocialFox.',
+    link: 'https://github.com/kyletmayfield/flowcore---project',
+    linkText: 'View on GitHub →',
+    sections: [
+      {
+        title: 'The Problem',
+        type: 'text',
+        content: 'The AI workflow automation market — Zapier, n8n, Make — solves the building problem, but nobody solves the trusting problem. MIT research found only 5% of enterprise AI pilots reach production. The gap isn\'t technical capability — it\'s confidence. When an AI node makes a bad decision in a workflow, there\'s no way to understand why. Every tool comparison mentions debugging AI as a pain point. Nobody had built the solution.'
+      },
+      {
+        title: 'What I\'m Building',
+        type: 'list',
+        items: [
+          'AI Reasoning Traces — every AI decision returns a structured reasoning chain: factors considered, weights assigned, alternatives rejected, and a confidence grade',
+          'Grade-based confidence scoring (A–F) — universally understood letter grades with color coding. A (90%+) flows automatically, F (<59%) triggers human review',
+          'Conditional human-in-the-loop — low-confidence decisions pause for user intervention with a configurable timeout. High-confidence decisions flow silently. Workflows never get stuck',
+          'Scenario testing — batch-run sample inputs to find edge cases before deployment. Results show a graded matrix with AI-generated edge case analysis',
+          'Workflow trust scores — an overall reliability grade based on aggregated confidence across all AI decisions, like a GPA for your automation',
+          'Adaptive AI assessment — underperforming branches automatically get AI-assisted evaluation until they recover above a passing grade, then deactivate'
+        ]
+      },
+      {
+        title: 'Architecture — Shared Engine, Two Front-Ends',
+        type: 'list',
+        items: [
+          'FlowCore — standalone TypeScript module handling workflow execution, graph walking, branching logic, AI reasoning traces, and confidence scoring',
+          'FlowPilot — visual drag-and-drop workflow builder using React Flow, with execution trace panel, scenario testing, trust score dashboard, and human review UI',
+          'TheSocialFox Integration — same engine powers multi-platform caption generation with persona × platform style filters and learned platform preferences',
+          'pnpm monorepo with workspaces — packages/flowcore, apps/flowpilot, apps/socialfox-adapter'
+        ]
+      },
+      {
+        title: 'How Branching Works',
+        type: 'text',
+        content: 'At branch points, the AI always picks the best option — it never hard-fails. Instead, it grades its own confidence honestly. A support ticket classified as "billing_angry" at 91% confidence (grade A) flows automatically to the senior agent queue. A sarcastic message classified as "neutral" at 52% (grade F) pauses for human review with a 30-second countdown. If the user doesn\'t respond, the AI\'s best guess proceeds. The reasoning trace shows exactly why it chose that path, what alternatives it considered, and why it rejected them.'
+      },
+      {
+        title: 'Competitive Positioning',
+        type: 'list',
+        items: [
+          'Zapier — 8,000+ integrations but AI is a black box, rigid structure, expensive at scale',
+          'n8n — 70+ AI nodes but steep learning curve, no AI explainability, requires DevOps',
+          'Make — good visual builder but AI is bolted on, no reasoning transparency',
+          'Relay.app — human-in-the-loop but always pauses, not conditionally based on confidence',
+          'FlowCore — transparent AI reasoning + grade-based scoring + conditional human review + scenario testing. Nobody else has this combination'
+        ]
+      },
+      {
+        title: 'TheSocialFox Integration',
+        type: 'text',
+        content: 'The same engine powers multi-platform caption generation in TheSocialFox. A persona is who you are — a platform filter is where you are. Same person, different rooms. The system starts with smart platform defaults, then learns each platform\'s style through user edits and selections. No configuration screens — the voice develops organically. Platforms averaging below 60% confidence automatically get AI-assisted evaluation until they recover.'
+      },
+      {
+        title: 'Tech Stack',
+        type: 'tech',
+        items: ['TypeScript', 'React 18', 'React Flow', 'Tailwind CSS', 'Supabase', 'Claude API', 'pnpm Workspaces', 'Vercel']
+      },
+      {
+        title: 'Project Status',
+        type: 'stats',
+        items: [
+          { value: 'Active', label: 'Status' },
+          { value: '6', label: 'Novel Features' },
+          { value: '2', label: 'Front-Ends' },
+          { value: '5→8', label: 'Node Types' }
+        ]
+      },
+      {
+        title: 'Why This Matters',
+        type: 'text',
+        content: 'HubSpot is investing in AI-powered workflow automation (Breeze agents, Sales Workspace). IBM is building enterprise AI orchestration around watsonx with a focus on safe, explainable AI. Both face the same unsolved problem: users don\'t trust AI workflows enough to deploy them. FlowCore solves that — and the same engine running in a real SaaS product proves the architecture is production-grade, not just a demo.'
+      }
+    ]
+  },
+  portfoliobuilder: {
+    icon: 'PB',
+    iconClass: 'portfoliobuilder',
+    title: 'AI Portfolio Builder',
+    subtitle: 'A complete productized service — clients fill out a form, AI generates a custom portfolio website in minutes, and they review/revise it through a live chat interface. Includes Stripe payments, automated deployments, and a Facebook Ads funnel. Built and launched solo in under a week.',
+    link: 'https://portfolio-form.thesocialfox.net/landing',
+    linkText: 'View Landing Page →',
+    sections: [
+      {
+        title: 'The Problem',
+        type: 'text',
+        content: 'Freelancers and small business owners need portfolio websites but can\'t afford $2,000–$5,000 for a web designer, and template builders like Squarespace still require hours of setup. I wanted to build a product where someone fills out one form, pays $99, and gets a fully custom, deployed portfolio site — with AI doing the heavy lifting.'
+      },
+      {
+        title: 'What I Built',
+        type: 'list',
+        items: [
+          'Multi-step intake form that collects personal info, work experience, projects, design preferences, and uploads (resume, headshot, project images)',
+          'AI portfolio generation pipeline — Claude receives the form data and produces a complete, production-ready HTML portfolio with responsive design, animations, and SEO',
+          'Live chat overlay — real-time Supabase-powered messaging where clients can request revisions and watch their portfolio update',
+          'Automated deployment — GitHub Actions builds the portfolio, deploys to Netlify, and sends preview links to both client and admin',
+          'Stripe checkout for $99 portfolio approval with webhook safety net that catches payments even if the client closes the tab',
+          '$20 revision package system — 3 free revisions pre-approval, then purchasable 20-round revision packages post-approval with full Stripe integration',
+          'Admin notification pipeline — email alerts to support inbox with folder-friendly subject prefixes ([DRAFT], [FINAL], [STRIPE]) plus SMS to my phone on every purchase',
+          'High-converting landing page with live iframe previews of 4 demo portfolios, animated fox wallpaper background, and Facebook Pixel tracking',
+          'Promo code system (FOXFAM20) managed entirely in Stripe — not discoverable in frontend code'
+        ]
+      },
+      {
+        title: 'Design & Marketing',
+        type: 'list',
+        items: [
+          'TheSocialFox brand integration — dark bark theme (#0d0b09), orange accents (#f97316), repeating fox wallpaper pattern with animated diagonal glow waves',
+          'Landing page copywriting optimized for Facebook ad traffic — proof bar, pricing cards, live demo previews, and clear CTAs',
+          'Facebook Ads campaign with Pixel integration tracking PageView, Lead, and Purchase conversion events',
+          'Professional email signature with fox logo and branded CTA button',
+          'Outlook inbox rules for automated email sorting — Drafts, Finals, Stripe payments, and Customer Support folders',
+          'Mobile-responsive design across all demo portfolios and the intake form'
+        ]
+      },
+      {
+        title: 'Architecture',
+        type: 'list',
+        items: [
+          '8 Supabase Edge Functions — form submission, AI generation, checkout, approval, revision, webhook, and revision package purchase',
+          'GitHub Actions CI/CD — repository_dispatch triggers portfolio builds and revision rebuilds automatically',
+          'Supabase Realtime for live chat — messages stream to the client as the AI processes revisions',
+          'Stripe REST API integration (no SDK) — checkout sessions, webhooks, coupons, and promotion codes all via fetch',
+          'Netlify deployment API for automated site provisioning — each portfolio gets its own subdomain',
+          'Revision tracking with enforced limits — free_revisions_used, package counters, auto-deactivation on exhaustion',
+          'SMS notifications via email-to-SMS gateway (Resend → T-Mobile) for instant purchase alerts'
+        ]
+      },
+      {
+        title: 'Tech Stack',
+        type: 'tech',
+        items: ['HTML/CSS/JS', 'Supabase', 'Deno Edge Functions', 'Claude API', 'Stripe', 'GitHub Actions', 'Netlify', 'Resend', 'Facebook Pixel']
+      },
+      {
+        title: 'Key Metrics',
+        type: 'stats',
+        items: [
+          { value: '100%', label: 'Solo Built' },
+          { value: '<1 week', label: 'Concept to Launch' },
+          { value: '8', label: 'Edge Functions' },
+          { value: '$99', label: 'Per Portfolio' }
+        ]
+      },
+      {
+        title: 'My Role — Everything',
+        type: 'list',
+        items: [
+          'Product vision and architecture — designed the full pipeline from intake form to deployed website',
+          'Frontend development — form UX, chat overlay, landing page, payment flows, thank-you experience',
+          'Backend development — all 8 edge functions, Stripe integration, webhook safety net, revision tracking',
+          'CI/CD pipeline — GitHub Actions workflow for automated portfolio builds and deployments',
+          'AI prompt engineering — structured prompts that produce deployment-ready HTML portfolios',
+          'Database design — portfolio_jobs table with revision tracking, payment status, and chat history',
+          'Brand design — landing page visuals, animated fox wallpaper, TheSocialFox theme integration',
+          'Marketing — Facebook Ads campaign, landing page copywriting, conversion tracking setup',
+          'Operations — support email setup, inbox automation, SMS alerts, promo code system'
+        ]
+      }
+    ]
+  },
   strategy: {
-    icon: '📊',
+    icon: 'BS',
     iconClass: 'strategy',
     title: 'SaaS Business Strategy',
     subtitle: 'Comprehensive business planning for TheSocialFox including revenue projections, competitive analysis, pricing optimization, and intellectual property protection.',
@@ -1545,7 +2144,7 @@ const projects = {
     ]
   },
   branding: {
-    icon: '🎨',
+    icon: 'BM',
     iconClass: 'brand',
     title: 'Brand & Marketing',
     subtitle: 'Complete brand identity creation and marketing campaign development for TheSocialFox — from logo concepts to launch-ready content libraries.',
@@ -1594,7 +2193,7 @@ const projects = {
     ]
   },
   tree: {
-    icon: '🌲',
+    icon: 'AZ',
     iconClass: 'tree',
     title: 'A to Z Tree Service',
     subtitle: 'Digital marketing management for a family-owned tree service in Citrus County, FL — Google Ads, Facebook campaigns, and content creation.',
@@ -1629,7 +2228,7 @@ const projects = {
     ]
   },
   consulting: {
-    icon: '💡',
+    icon: 'DC',
     iconClass: 'consult',
     title: 'Digital Consulting',
     subtitle: 'Web development and digital marketing consulting for local service companies — modern websites, SEO optimization, and growth strategy.',
@@ -1673,7 +2272,7 @@ const projects = {
     ]
   },
   voip: {
-    icon: '📞',
+    icon: 'VT',
     iconClass: 'voip',
     title: 'VoIP Telecom Support',
     subtitle: 'Escalated technical support at Centurion Cares handling complex VoIP issues — deep packet analysis, SIP protocol troubleshooting, and carrier coordination.',
@@ -1707,8 +2306,80 @@ const projects = {
       }
     ]
   },
+  brifilter: {
+    icon: 'BF',
+    iconClass: 'brifilter',
+    title: 'Brifilter',
+    subtitle: 'A perceptual image hashing engine that compares a user\'s photo library against their connected social media accounts to detect which images have already been posted — using DCT-based pHash for resolution-independent matching with a human review UI for edge cases.',
+    link: 'https://github.com/kyletmayfield/brifilter',
+    linkText: 'View on GitHub →',
+    sections: [
+      {
+        title: 'The Problem',
+        type: 'text',
+        content: 'Social media users accumulate hundreds of photos across their library and multiple platforms. There\'s no way to know which photos have already been posted where — especially for users who existed on social media before adopting a management tool. Traditional file-matching fails because every platform resizes, recompresses, and sometimes filters uploaded images, making the file bytes completely different even though the image is visually identical.'
+      },
+      {
+        title: 'What I\'m Building',
+        type: 'list',
+        items: [
+          'Perceptual image hashing (pHash) using DCT — resizes all images to 32x32 grayscale, applies a Discrete Cosine Transform, extracts the 64 lowest-frequency coefficients, and produces a 64-bit fingerprint that survives resizing, recompression, and light filtering',
+          'Three-tier matching system — Hamming distance 0-10 auto-matches (definitely same photo), 11-17 queues for human review (edge cases), 18+ ignores (different photos)',
+          'Side-by-side review UI for cusp matches — users see their library photo next to the social media version with a confidence percentage, and click Same or Different. Arrow key shortcuts for fast review',
+          'One-time fan-out sync per platform — fetches all user media from Instagram, Facebook, X, LinkedIn, and TikTok via their APIs, hashes each image server-side, then compares against the library',
+          'Post-sync native tracking — after initial sync, TheSocialFox tracks all future posts natively, eliminating the need for re-syncing unless the user posts outside the app',
+          'Platform badges on library photos — small icons in the photo grid showing which platforms each image has been posted to',
+          'PostgreSQL hamming_distance() function using XOR + bit_count for optional in-database comparison of large datasets',
+          'Resumable sync with progress tracking — if a sync is interrupted (token expiry, rate limit), progress is saved and the user can continue from where they left off'
+        ]
+      },
+      {
+        title: 'How pHash Works',
+        type: 'text',
+        content: 'Every image — whether it\'s a 4000x3000 original or a 150px Instagram thumbnail — gets resized to 32x32 grayscale. The DCT extracts frequency-domain features (overall structure and contrast patterns), producing 64 coefficients. Each coefficient is compared against the median to produce a single bit. The resulting 64-bit hash is compared via Hamming distance (XOR + popcount). Social platforms typically resize and recompress uploads, producing Hamming distances of 2-8 against the original — well within the auto-match threshold of 10.'
+      },
+      {
+        title: 'Architecture',
+        type: 'list',
+        items: [
+          'Supabase Edge Function (Deno) — handles all sync, hashing, and comparison server-side. No image data touches the browser',
+          'Sharp (npm:sharp) for image processing — resize, grayscale, raw pixel extraction in the edge function',
+          'Custom 2D DCT implementation — Type II Discrete Cosine Transform applied to the 32x32 pixel grid',
+          'Three database tables — image_hashes (64-bit pHash per image), hash_matches (comparison results with status tracking), sync_history (progress and resumption)',
+          'RLS policies on all tables — users can only see their own hashes and matches',
+          'Social API integration — paginated media fetching from all 5 platforms using OAuth tokens from existing social_connections table',
+          'Supabase Realtime for progress updates — edge function publishes sync progress, frontend shows live progress bar'
+        ]
+      },
+      {
+        title: 'Tech Stack',
+        type: 'tech',
+        items: ['Sharp', 'DCT / pHash', 'Deno Edge Functions', 'PostgreSQL', 'Supabase', 'React 18', 'Meta Graph API', 'X API v2', 'LinkedIn API', 'TikTok API']
+      },
+      {
+        title: 'Key Metrics',
+        type: 'stats',
+        items: [
+          { value: '64-bit', label: 'Hash Size' },
+          { value: '~210ms', label: 'Per Image (hash)' },
+          { value: '<0.01ms', label: 'Per Comparison' },
+          { value: '5', label: 'Platforms' }
+        ]
+      },
+      {
+        title: 'Design Decisions',
+        type: 'list',
+        items: [
+          'Server-side only — images are fetched in-memory, hashed, and discarded. Only the 8-byte hash is stored. A pHash cannot be reversed to reconstruct the image',
+          'Human-in-the-loop for ambiguous matches — rather than risking false positives or false negatives, the 11-17 Hamming distance range surfaces a small number of edge cases for user confirmation',
+          'User review decisions become implicit training data — if users consistently confirm matches at distance 13, platform-specific thresholds can be tuned over time',
+          'PostgreSQL bit_count() for in-database comparison — avoids pulling thousands of hashes into the edge function for users with very large libraries'
+        ]
+      }
+    ]
+  },
   workoutapp: {
-    icon: '💪',
+    icon: 'WG',
     iconClass: 'workout',
     title: 'Workout Generator',
     subtitle: 'A desktop workout app with AI-powered physique analysis, randomized split generation, interactive exercise logging, and a custom polar bear arctic theme — built from scratch with WPF and .NET 7.',
@@ -1782,8 +2453,11 @@ function openModal(projectId) {
   const project = projects[projectId];
   if (!project) return;
 
+  const colorMap = { fox: '249,115,22', brand: '249,115,22', portfoliobuilder: '249,115,22', flowcore: '6,182,212', tree: '34,197,94', strategy: '168,85,247', voip: '56,189,248', brifilter: '16,185,129' };
+  const rgb = colorMap[project.iconClass] || '126,200,227';
+
   let html = `
-    <div class="modal-icon ${project.iconClass}" style="background: rgba(${project.iconClass === 'fox' || project.iconClass === 'brand' ? '249,115,22' : project.iconClass === 'tree' ? '34,197,94' : project.iconClass === 'strategy' ? '168,85,247' : project.iconClass === 'voip' ? '56,189,248' : '126,200,227'}, 0.15); border: 1px solid rgba(${project.iconClass === 'fox' || project.iconClass === 'brand' ? '249,115,22' : project.iconClass === 'tree' ? '34,197,94' : project.iconClass === 'strategy' ? '168,85,247' : project.iconClass === 'voip' ? '56,189,248' : '126,200,227'}, 0.25);">${project.icon}</div>
+    <div class="modal-icon ${project.iconClass}" style="background: rgba(${rgb}, 0.15); border: 1px solid rgba(${rgb}, 0.25); color: rgb(${rgb});">${project.icon}</div>
     <h2 class="modal-title">${project.title}</h2>
     <p class="modal-subtitle">${project.subtitle}</p>
   `;
